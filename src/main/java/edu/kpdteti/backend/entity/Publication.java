@@ -21,6 +21,7 @@ public class Publication {
     public static final String PUBLICATION_DATE = "publicationDate";
     public static final String PUBLICATION_PUBLISHER = "publisher";
     public static final String PUBLICATION_DESCRIPTION = "description";
+    public static final String OTHER_AUTHOR = "otherAuthor";
     public static final String CREATED_AT = "createdAt";
     public static final String LAST_UPDATED = "lastUpdated";
 
@@ -37,6 +38,9 @@ public class Publication {
 
     @Column(name = PUBLICATION_DESCRIPTION)
     private String publicationDescription;
+
+    @Column(name = OTHER_AUTHOR)
+    private String otherAuthor;
 
     @Column(name = CREATED_AT)
     private String publicationCreatedAt;
