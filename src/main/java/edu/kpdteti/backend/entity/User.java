@@ -2,15 +2,21 @@ package edu.kpdteti.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.kpdteti.backend.enums.UserRole;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Entity
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 @EntityListeners(value = {AuditingEntityListener.class})
 @Table(name = User.TABLE_NAME, uniqueConstraints = {
         @UniqueConstraint(columnNames = User.USER_ID),

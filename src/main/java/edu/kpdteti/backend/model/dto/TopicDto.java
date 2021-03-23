@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.model.response.topic;
+package edu.kpdteti.backend.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetTopicResponse {
+public class TopicDto {
 
     private Long topicId;
     private String topicName;
