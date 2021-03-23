@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.entity.table;
+package edu.kpdteti.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
