@@ -24,10 +24,12 @@ public class Publication {
     public static final String TABLE_NAME = "publications";
     public static final String PUBLICATION_ID = "id";
     public static final String USER_ID = "userId";
+    public static final String PUBLICATION_TITLE = "publicationTitle";
     public static final String PUBLICATION_DATE = "publicationDate";
     public static final String PUBLICATION_PUBLISHER = "publisher";
     public static final String PUBLICATION_DESCRIPTION = "description";
     public static final String OTHER_AUTHOR = "otherAuthor";
+    public static final String PUBLICATION_PATH = "publicationPath";
     public static final String CREATED_AT = "createdAt";
     public static final String LAST_UPDATED = "lastUpdated";
 
@@ -35,6 +37,9 @@ public class Publication {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = PUBLICATION_ID)
     private Long publicationId;
+
+    @Column(name = PUBLICATION_TITLE)
+    private String publicationTitle;
 
     @Column(name = PUBLICATION_DATE)
     private String publicationDate;
@@ -47,6 +52,9 @@ public class Publication {
 
     @Column(name = OTHER_AUTHOR)
     private String otherAuthor;
+
+    @Column(name = PUBLICATION_PATH)
+    private String publicationPath;
 
     @Column(name = CREATED_AT)
     private String publicationCreatedAt;

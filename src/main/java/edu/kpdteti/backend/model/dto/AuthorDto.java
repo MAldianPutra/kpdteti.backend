@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.model.response.publication;
+package edu.kpdteti.backend.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DownloadPublicationResponse {
+public class AuthorDto {
 
-    private String publicationPath;
+    private Long authorId;
+    private String authorName;
+    private String authorEmail;
 
 }
