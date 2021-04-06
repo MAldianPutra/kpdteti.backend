@@ -12,6 +12,6 @@ public interface PublicationRepository extends JpaRepository<Publication, Long> 
 
     Publication findByPublicationId(Long publicationId);
 
-    Set<Publication> findAllByPublicationAuthors(Set<PublicationAuthor> publicationAuthors);
+//    Set<Publication> findAllByPublicationAuthors(Set<PublicationAuthor> publicationAuthors);
 
 }

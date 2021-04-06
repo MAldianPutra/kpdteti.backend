@@ -52,17 +52,18 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public GetPublicationByAuthorResponse getPublicationByAuthor(Long authorId) {
-        Set<PublicationAuthor> publicationAuthors = publicationAuthorRepository.findAllByAuthor_AuthorId(authorId);
-        Set<Publication> publications = publicationRepository.findAllByPublicationAuthors(publicationAuthors);
-        GetPublicationByAuthorResponse response = new GetPublicationByAuthorResponse();
-        List<PublicationDto> publicationDtos = new ArrayList<>();
-        publications.forEach(publication -> {
-            PublicationDto publicationDto = new PublicationDto();
-            BeanUtils.copyProperties(publication, publicationDto);
-            publicationDtos.add(publicationDto);
-        });
-        response.setPublicationDtos(publicationDtos);
-        return response;
+//        Set<PublicationAuthor> publicationAuthors = publicationAuthorRepository.findAllByAuthor_AuthorId(authorId);
+//        Set<Publication> publications = publicationRepository.findAllByPublicationAuthors(publicationAuthors);
+//        GetPublicationByAuthorResponse response = new GetPublicationByAuthorResponse();
+//        List<PublicationDto> publicationDtos = new ArrayList<>();
+//        publications.forEach(publication -> {
+//            PublicationDto publicationDto = new PublicationDto();
+//            BeanUtils.copyProperties(publication, publicationDto);
+//            publicationDtos.add(publicationDto);
+//        });
+//        response.setPublicationDtos(publicationDtos);
+//        return response;
+        return null;
     }
 
     @Override
