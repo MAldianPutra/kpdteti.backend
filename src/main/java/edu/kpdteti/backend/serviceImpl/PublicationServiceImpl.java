@@ -1,35 +1,23 @@
 package edu.kpdteti.backend.serviceImpl;
 
 import edu.kpdteti.backend.entity.Publication;
-import edu.kpdteti.backend.entity.PublicationAuthor;
-import edu.kpdteti.backend.model.dto.PublicationDto;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
-import edu.kpdteti.backend.repository.PublicationAuthorRepository;
 import edu.kpdteti.backend.repository.PublicationRepository;
-import edu.kpdteti.backend.repository.PublicationTopicRepository;
 import edu.kpdteti.backend.service.PublicationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 @Service
 public class PublicationServiceImpl implements PublicationService {
 
-    private PublicationRepository publicationRepository;
-    private PublicationAuthorRepository publicationAuthorRepository;
-    private PublicationTopicRepository publicationTopicRepository;
+    private final PublicationRepository publicationRepository;
 
     @Autowired
-    public PublicationServiceImpl(PublicationRepository publicationRepository, PublicationAuthorRepository publicationAuthorRepository, PublicationTopicRepository publicationTopicRepository) {
+    public PublicationServiceImpl(PublicationRepository publicationRepository) {
         this.publicationRepository = publicationRepository;
-        this.publicationAuthorRepository = publicationAuthorRepository;
-        this.publicationTopicRepository = publicationTopicRepository;
     }
 
     @Override
@@ -52,17 +40,6 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public GetPublicationByAuthorResponse getPublicationByAuthor(Long authorId) {
-//        Set<PublicationAuthor> publicationAuthors = publicationAuthorRepository.findAllByAuthor_AuthorId(authorId);
-//        Set<Publication> publications = publicationRepository.findAllByPublicationAuthors(publicationAuthors);
-//        GetPublicationByAuthorResponse response = new GetPublicationByAuthorResponse();
-//        List<PublicationDto> publicationDtos = new ArrayList<>();
-//        publications.forEach(publication -> {
-//            PublicationDto publicationDto = new PublicationDto();
-//            BeanUtils.copyProperties(publication, publicationDto);
-//            publicationDtos.add(publicationDto);
-//        });
-//        response.setPublicationDtos(publicationDtos);
-//        return response;
         return null;
     }
 

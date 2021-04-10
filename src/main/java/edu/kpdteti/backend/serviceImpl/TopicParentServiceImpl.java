@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class TopicParentServiceImpl implements TopicParentService {
 
-    private TopicParentRepository topicParentRepository;
+    private final TopicParentRepository topicParentRepository;
 
     @Autowired
     public TopicParentServiceImpl(TopicParentRepository topicParentRepository) {

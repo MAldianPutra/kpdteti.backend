@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public AuthenticationServiceImpl(UserRepository userRepository) {

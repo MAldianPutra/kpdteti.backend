@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
     @Autowired
     public AuthorServiceImpl(AuthorRepository authorRepository) {

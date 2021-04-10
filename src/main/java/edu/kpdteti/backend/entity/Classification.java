@@ -39,7 +39,6 @@ public class Classification {
     @Column(name = LAST_UPDATED)
     private LocalDateTime classificationLastUpdated;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = PUBLICATION_ID)
     private Publication publication;

@@ -62,22 +62,18 @@ public class Publication {
     @Column(name = LAST_UPDATED)
     private String publicationLastUpdated;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = USER_ID)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = USER_ID, nullable = false)
     private User user;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "publication", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "publication", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Classification classification;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "publication", fetch = FetchType.LAZY)
-    private Set<PublicationTopic> publicationTopics;
+    @ManyToMany(mappedBy = "publications", fetch = FetchType.LAZY)
+    private Set<Topic> topics;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "publication", fetch = FetchType.LAZY)
-    private Set<PublicationAuthor> publicationAuthors;
+    @ManyToMany(mappedBy = "publications", fetch = FetchType.LAZY)
+    private Set<Author> authors;
 
 
 }
