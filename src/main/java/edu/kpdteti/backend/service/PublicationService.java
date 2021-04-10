@@ -4,15 +4,17 @@ import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
 
+import java.util.List;
+
 public interface PublicationService {
 
     DeletePublicationResponse deletePublication(Long publicationId);
 
     DownloadPublicationResponse downloadPublication(Long publicationId);
 
-    GetPublicationByAuthorResponse getPublicationByAuthor(Long authorId);
+    List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(Long authorId);
 
-    GetPublicationByTopicResponse getPublicationByTopic(Long topicId);
+    List<GetPublicationsByTopicResponse> getPublicationsByTopic(Long topicId);
 
     GetPublicationResponse getPublication(Long publicationId);
 

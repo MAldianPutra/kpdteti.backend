@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdatePublicationResponse {
+public class GetPublicationsByAuthorResponse {
 
     private Long publicationId;
     private String publicationTitle;

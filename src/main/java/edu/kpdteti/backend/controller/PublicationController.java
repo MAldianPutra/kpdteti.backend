@@ -3,7 +3,6 @@ package edu.kpdteti.backend.controller;
 import edu.kpdteti.backend.ApiPath;
 import edu.kpdteti.backend.model.response.publication.DeletePublicationResponse;
 import edu.kpdteti.backend.model.response.publication.DownloadPublicationResponse;
-import edu.kpdteti.backend.model.response.publication.GetPublicationByAuthorResponse;
 import edu.kpdteti.backend.service.PublicationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
