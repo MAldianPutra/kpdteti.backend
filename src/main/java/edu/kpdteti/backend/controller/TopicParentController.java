@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class TopicParentController {
 
-    private TopicParentService topicParentService;
+    private final TopicParentService topicParentService;
 
     @Autowired
     public TopicParentController(TopicParentService topicParentService) {

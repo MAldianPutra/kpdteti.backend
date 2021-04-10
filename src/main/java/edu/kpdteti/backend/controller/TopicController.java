@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class TopicController {
 
-    private TopicService topicService;
+    private final TopicService topicService;
 
     @Autowired
     public TopicController(TopicService topicService) {

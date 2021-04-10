@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface ClassificationRepository extends JpaRepository<Classification, Long> {
 
 
-
 }
