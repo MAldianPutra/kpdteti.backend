@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostAuthorResponse {
 
-    private Long authorId;
+    private String authorId;
     private String authorName;
     private String authorEmail;
     private String authorFaculty;

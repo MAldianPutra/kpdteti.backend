@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.model.request.authentication;
+package edu.kpdteti.backend.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterAdminRequest {
+public class TopicParentDto {
 
-    private String userEmail;
-    private String userPassword;
+    private String topicParentId;
+    private String topicParentName;
 
 }

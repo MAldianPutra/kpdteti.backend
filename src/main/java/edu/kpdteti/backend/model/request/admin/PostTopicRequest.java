@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class PostTopicRequest {
 
     private String topicName;
-    private Long topicParentId;
+    private String topicParentId;
 
 }

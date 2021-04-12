@@ -3,13 +3,17 @@ package edu.kpdteti.backend.serviceImpl;
 import edu.kpdteti.backend.entity.Author;
 import edu.kpdteti.backend.entity.Topic;
 import edu.kpdteti.backend.entity.TopicParent;
-import edu.kpdteti.backend.model.request.admin.*;
+import edu.kpdteti.backend.entity.dto.TopicParentDto;
+import edu.kpdteti.backend.enums.IdGeneratorEnum;
+import edu.kpdteti.backend.model.request.admin.PostAuthorRequest;
+import edu.kpdteti.backend.model.request.admin.PostTopicParentRequest;
+import edu.kpdteti.backend.model.request.admin.PostTopicRequest;
 import edu.kpdteti.backend.model.response.admin.*;
 import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.repository.TopicParentRepository;
 import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.AdminService;
-import javassist.NotFoundException;
+import edu.kpdteti.backend.util.IdGenerator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,59 +26,56 @@ public class AdminServiceImpl implements AdminService {
     private final AuthorRepository authorRepository;
     private final TopicParentRepository topicParentRepository;
     private final TopicRepository topicRepository;
+    private final IdGenerator idGenerator;
 
     @Autowired
-    public AdminServiceImpl(AuthorRepository authorRepository, TopicParentRepository topicParentRepository, TopicRepository topicRepository) {
+    public AdminServiceImpl(AuthorRepository authorRepository, TopicParentRepository topicParentRepository, TopicRepository topicRepository, IdGenerator idGenerator) {
         this.authorRepository = authorRepository;
         this.topicParentRepository = topicParentRepository;
         this.topicRepository = topicRepository;
+        this.idGenerator = idGenerator;
     }
 
     @Override
-    public DeleteAuthorResponse deleteAuthor(Long authorId) {
-        try {
+    public DeleteAuthorResponse deleteAuthor(String authorId) {
+        if(authorRepository.existsById(authorId)) {
             authorRepository.deleteById(authorId);
             return DeleteAuthorResponse.builder()
                     .message("Success")
                     .build();
-        } catch (IllegalArgumentException ex) {
-            return DeleteAuthorResponse.builder()
-                    .message("Failed, authorId not found.")
-                    .build();
+        } else {
+            throw new RuntimeException("Fail, no Author with id " + authorId);
         }
     }
 
     @Override
-    public DeleteTopicParentResponse deleteTopicParent(Long topicParentId) {
+    public DeleteTopicParentResponse deleteTopicParent(String topicParentId) {
         try {
             topicParentRepository.deleteById(topicParentId);
             return DeleteTopicParentResponse.builder()
                     .message("Success")
                     .build();
         } catch (IllegalArgumentException ex) {
-            return DeleteTopicParentResponse.builder()
-                    .message("Failed, topicParentId not found.")
-                    .build();
+            throw new RuntimeException("Fail, no TopicParent with id " + topicParentId);
         }
     }
 
     @Override
-    public DeleteTopicResponse deleteTopic(Long topicId) {
+    public DeleteTopicResponse deleteTopic(String topicId) {
         try {
             topicRepository.deleteById(topicId);
             return DeleteTopicResponse.builder()
                     .message("Success")
                     .build();
         } catch (IllegalArgumentException ex) {
-            return DeleteTopicResponse.builder()
-                    .message("Failed, topicId not found.")
-                    .build();
+            throw new RuntimeException("Fail, no Topic with id " + topicId);
         }
     }
 
     @Override
     public PostAuthorResponse postAuthor(PostAuthorRequest request) {
         Author author = Author.builder()
+                .authorId(idGenerator.generateId(IdGeneratorEnum.AUTHOR))
                 .authorCreatedAt(LocalDateTime.now())
                 .authorLastUpdated(LocalDateTime.now())
                 .build();
@@ -88,6 +89,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public PostTopicParentResponse postTopicParent(PostTopicParentRequest request) {
         TopicParent topicParent = TopicParent.builder()
+                .topicParentId(idGenerator.generateId(IdGeneratorEnum.TOPIC_PARENT))
                 .topicParentCreatedAt(LocalDateTime.now())
                 .topicParentLastUpdated(LocalDateTime.now())
                 .build();
@@ -100,10 +102,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public PostTopicResponse postTopic(PostTopicRequest request) {
-        if(topicParentRepository.existsById(request.getTopicParentId())) {
+        try {
             TopicParent topicParent = topicParentRepository.findByTopicParentId(request.getTopicParentId());
+            TopicParentDto topicParentDto = new TopicParentDto();
+            BeanUtils.copyProperties(topicParent, topicParentDto);
             Topic topic = Topic.builder()
-                    .topicParent(topicParent)
+                    .topicId(idGenerator.generateId(IdGeneratorEnum.TOPIC))
+                    .topicParentDto(topicParentDto)
                     .topicCreatedAt(LocalDateTime.now())
                     .topicLastUpdated(LocalDateTime.now())
                     .build();
@@ -111,12 +116,9 @@ public class AdminServiceImpl implements AdminService {
             Topic savedTopic = topicRepository.save(topic);
             PostTopicResponse response = new PostTopicResponse();
             BeanUtils.copyProperties(savedTopic, response);
-            response.setMessage("Success");
             return response;
-        } else {
-            PostTopicResponse response = new PostTopicResponse();
-            response.setMessage("Failed, TopicParent not found.");
-            return response;
+        } catch (IllegalArgumentException ex) {
+            throw new RuntimeException("Topic Parent Id wrong.");
         }
     }
 }

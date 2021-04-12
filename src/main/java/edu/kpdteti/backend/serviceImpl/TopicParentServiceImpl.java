@@ -1,8 +1,7 @@
 package edu.kpdteti.backend.serviceImpl;
 
 import edu.kpdteti.backend.entity.TopicParent;
-import edu.kpdteti.backend.model.dto.TopicParentDto;
-import edu.kpdteti.backend.model.response.topicParent.GetAllTopicParentResponse;
+import edu.kpdteti.backend.model.response.topicParent.GetAllTopicParentsResponse;
 import edu.kpdteti.backend.repository.TopicParentRepository;
 import edu.kpdteti.backend.service.TopicParentService;
 import org.springframework.beans.BeanUtils;
@@ -23,18 +22,15 @@ public class TopicParentServiceImpl implements TopicParentService {
     }
 
     @Override
-    public GetAllTopicParentResponse getAllTopicParent() {
+    public List<GetAllTopicParentsResponse> getAllTopicParents() {
         List<TopicParent> topicParents = topicParentRepository.findAll();
-        List<TopicParentDto> topicParentDtos = new ArrayList<>();
-        topicParents.forEach(topicParent -> topicParentDtos.add(toTopicParentDto(topicParent)));
-        GetAllTopicParentResponse response = new GetAllTopicParentResponse();
-        response.setTopicParentDtos(topicParentDtos);
-        return response;
+        List<GetAllTopicParentsResponse> responses = new ArrayList<>();
+        topicParents.forEach(topicParent -> {
+            GetAllTopicParentsResponse response = new GetAllTopicParentsResponse();
+            BeanUtils.copyProperties(topicParent, response);
+            responses.add(response);
+        });
+        return responses;
     }
 
-    private TopicParentDto toTopicParentDto(TopicParent topicParent) {
-        TopicParentDto topicParentDto = new TopicParentDto();
-        BeanUtils.copyProperties(topicParent, topicParentDto);
-        return topicParentDto;
-    }
 }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PostTopicParentResponse {
 
-    private Long topicParentId;
+    private String topicParentId;
     private String topicParentName;
     private LocalDateTime topicParentCreatedAt;
 

@@ -1,30 +1,32 @@
 package edu.kpdteti.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.kpdteti.backend.entity.dto.AuthorDto;
+import edu.kpdteti.backend.entity.dto.ClassificationDto;
+import edu.kpdteti.backend.entity.dto.TopicDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@EntityListeners(value = {AuditingEntityListener.class})
-@Table(name = Publication.TABLE_NAME, uniqueConstraints = {
-        @UniqueConstraint(columnNames = Publication.PUBLICATION_ID)
-})
+@Document(collection = Publication.COLLECTION_NAME)
 public class Publication {
 
-    public static final String TABLE_NAME = "publications";
+    public static final String COLLECTION_NAME = "publications";
     public static final String PUBLICATION_ID = "id";
     public static final String USER_ID = "userId";
+    public static final String CLASSIFICATION = "classification";
+    public static final String AUTHOR = "author";
+    public static final String TOPIC = "topic";
     public static final String PUBLICATION_TITLE = "publicationTitle";
     public static final String PUBLICATION_DATE = "publicationDate";
     public static final String PUBLICATION_PUBLISHER = "publisher";
@@ -35,46 +37,43 @@ public class Publication {
     public static final String LAST_UPDATED = "lastUpdated";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = PUBLICATION_ID)
-    private Long publicationId;
+    @Field(value = PUBLICATION_ID)
+    private String publicationId;
 
-    @Column(name = PUBLICATION_TITLE)
+    @Field(value = USER_ID)
+    private String userId;
+
+    @Field(value = CLASSIFICATION)
+    private ClassificationDto classificationDto;
+
+    @Field(value = AUTHOR)
+    private List<AuthorDto> authorDto;
+
+    @Field(value = TOPIC)
+    private List<TopicDto> topicDto;
+
+    @Field(value = PUBLICATION_TITLE)
     private String publicationTitle;
 
-    @Column(name = PUBLICATION_DATE)
+    @Field(value = PUBLICATION_DATE)
     private String publicationDate;
 
-    @Column(name = PUBLICATION_PUBLISHER)
+    @Field(value = PUBLICATION_PUBLISHER)
     private String publicationPublisher;
 
-    @Column(name = PUBLICATION_DESCRIPTION)
+    @Field(value = PUBLICATION_DESCRIPTION)
     private String publicationDescription;
 
-    @Column(name = OTHER_AUTHOR)
-    private String otherAuthor;
+    @Field(value = OTHER_AUTHOR)
+    private List<String> otherAuthors;
 
-    @Column(name = PUBLICATION_PATH)
+    @Field(value = PUBLICATION_PATH)
     private String publicationPath;
 
-    @Column(name = CREATED_AT)
+    @Field(value = CREATED_AT)
     private LocalDateTime publicationCreatedAt;
 
-    @Column(name = LAST_UPDATED)
+    @Field(value = LAST_UPDATED)
     private LocalDateTime publicationLastUpdated;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = USER_ID, nullable = false)
-    private User user;
-
-    @OneToOne(mappedBy = "publication", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Classification classification;
-
-    @ManyToMany(mappedBy = "publications", fetch = FetchType.LAZY)
-    private Set<Topic> topics;
-
-    @ManyToMany(mappedBy = "publications", fetch = FetchType.LAZY)
-    private Set<Author> authors;
-
 
 }

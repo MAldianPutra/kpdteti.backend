@@ -1,7 +1,7 @@
 package edu.kpdteti.backend.controller;
 
 import edu.kpdteti.backend.ApiPath;
-import edu.kpdteti.backend.model.response.topicParent.GetAllTopicParentResponse;
+import edu.kpdteti.backend.model.response.topicParent.GetAllTopicParentsResponse;
 import edu.kpdteti.backend.service.TopicParentService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Api
 @RestController
@@ -25,7 +27,7 @@ public class TopicParentController {
     }
 
     @GetMapping(ApiPath.TOPIC_PARENT)
-    public ResponseEntity<GetAllTopicParentResponse> getAllTopicParent(){
-        return new ResponseEntity<>(topicParentService.getAllTopicParent(), HttpStatus.OK);
+    public ResponseEntity<List<GetAllTopicParentsResponse>> getAllTopicParent(){
+        return new ResponseEntity<>(topicParentService.getAllTopicParents(), HttpStatus.OK);
     }
 }

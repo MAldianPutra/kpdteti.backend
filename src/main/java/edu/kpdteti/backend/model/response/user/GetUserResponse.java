@@ -1,6 +1,6 @@
 package edu.kpdteti.backend.model.response.user;
 
-import edu.kpdteti.backend.enums.UserRole;
+import edu.kpdteti.backend.enums.UserRoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetUserResponse {
 
-    private Long userId;
+    private String userId;
     private String userName;
-    private UserRole userRole;
+    private String userEmail;
+    private UserRoleEnum userRoleEnum;
 
 }

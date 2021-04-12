@@ -4,6 +4,6 @@ import edu.kpdteti.backend.model.response.author.GetAuthorResponse;
 
 public interface AuthorService {
 
-    GetAuthorResponse getAuthor(Long authorId);
+    GetAuthorResponse getAuthor(String authorId);
 
 }

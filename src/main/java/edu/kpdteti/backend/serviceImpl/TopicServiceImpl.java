@@ -1,9 +1,8 @@
 package edu.kpdteti.backend.serviceImpl;
 
 import edu.kpdteti.backend.entity.Topic;
-import edu.kpdteti.backend.model.dto.TopicDto;
-import edu.kpdteti.backend.model.response.topic.GetTopicByTopicParentResponse;
 import edu.kpdteti.backend.model.response.topic.GetTopicResponse;
+import edu.kpdteti.backend.model.response.topic.GetTopicsByTopicParentResponse;
 import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.TopicService;
 import org.springframework.beans.BeanUtils;
@@ -24,24 +23,23 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public GetTopicByTopicParentResponse getTopicByTopicParent(Long topicParentId) {
-        List<Topic> topics = topicRepository.findAllByTopicParent_TopicParentId(topicParentId);
-        List<TopicDto> topicDtos = new ArrayList<>();
-        topics.forEach(topic -> topicDtos.add(toTopicDto(topic)));
-        return new GetTopicByTopicParentResponse(topicDtos);
+    public List<GetTopicsByTopicParentResponse> getTopicsByTopicParent(String topicParentId) {
+        List<Topic> topics = topicRepository.findAllByTopicParentDto_TopicParentId(topicParentId);
+        List<GetTopicsByTopicParentResponse> responses = new ArrayList<>();
+        topics.forEach(topic -> {
+            GetTopicsByTopicParentResponse response = new GetTopicsByTopicParentResponse();
+            BeanUtils.copyProperties(topic, response);
+            responses.add(response);
+        });
+        return responses;
     }
 
     @Override
-    public GetTopicResponse getTopic(Long topicId) {
+    public GetTopicResponse getTopic(String topicId) {
         Topic topic = topicRepository.findByTopicId(topicId);
         GetTopicResponse response = new GetTopicResponse();
         BeanUtils.copyProperties(topic, response);
         return response;
     }
 
-    private TopicDto toTopicDto(Topic topic) {
-        TopicDto topicDto = new TopicDto();
-        BeanUtils.copyProperties(topic, topicDto);
-        return topicDto;
-    }
 }

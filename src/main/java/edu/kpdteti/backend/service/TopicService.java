@@ -1,12 +1,14 @@
 package edu.kpdteti.backend.service;
 
-import edu.kpdteti.backend.model.response.topic.GetTopicByTopicParentResponse;
+import edu.kpdteti.backend.model.response.topic.GetTopicsByTopicParentResponse;
 import edu.kpdteti.backend.model.response.topic.GetTopicResponse;
+
+import java.util.List;
 
 public interface TopicService {
 
-    GetTopicByTopicParentResponse getTopicByTopicParent(Long topicParentId);
+    List<GetTopicsByTopicParentResponse> getTopicsByTopicParent(String topicParentId);
 
-    GetTopicResponse getTopic(Long topicId);
+    GetTopicResponse getTopic(String topicId);
 
 }

@@ -27,27 +27,27 @@ public class PublicationController {
     }
 
     @DeleteMapping(ApiPath.PUBLICATION)
-    public ResponseEntity<DeletePublicationResponse> deletePublication(@RequestParam Long publicationId) {
+    public ResponseEntity<DeletePublicationResponse> deletePublication(@RequestParam String publicationId) throws ClassNotFoundException {
         return new ResponseEntity<>(publicationService.deletePublication(publicationId), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.PUBLICATION_DOWNLOAD)
-    public ResponseEntity<DownloadPublicationResponse> downloadPublication(@RequestParam Long publicationId) {
+    public ResponseEntity<DownloadPublicationResponse> downloadPublication(@RequestParam String publicationId) {
         return new ResponseEntity<>(publicationService.downloadPublication(publicationId), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.AUTHOR_PUBLICATIONS)
-    public ResponseEntity<List<GetPublicationsByAuthorResponse>> getPublicationByAuthor(@RequestParam Long authorId) {
+    public ResponseEntity<List<GetPublicationsByAuthorResponse>> getPublicationByAuthor(@RequestParam String authorId) {
         return new ResponseEntity<>(publicationService.getPublicationsByAuthor(authorId), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.TOPIC_PUBLICATIONS)
-    public ResponseEntity<List<GetPublicationsByTopicResponse>> getPublicationsByTopic(@RequestParam Long topicId) {
+    public ResponseEntity<List<GetPublicationsByTopicResponse>> getPublicationsByTopic(@RequestParam String topicId) {
         return new ResponseEntity<>(publicationService.getPublicationsByTopic(topicId), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.PUBLICATION)
-    public ResponseEntity<GetPublicationResponse> getPublication(@RequestParam Long publicationId) {
+    public ResponseEntity<GetPublicationResponse> getPublication(@RequestParam String publicationId) {
         return new ResponseEntity<>(publicationService.getPublication(publicationId), HttpStatus.OK);
     }
 

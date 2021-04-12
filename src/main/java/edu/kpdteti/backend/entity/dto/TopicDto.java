@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.model.dto;
+package edu.kpdteti.backend.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorDto {
+public class TopicDto {
 
-    private Long authorId;
-    private String authorName;
-    private String authorEmail;
+    private String topicId;
+    private String topicName;
+    private TopicParentDto topicParent;
 
 }

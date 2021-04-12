@@ -1,30 +1,24 @@
 package edu.kpdteti.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.kpdteti.backend.enums.UserRole;
+import edu.kpdteti.backend.enums.UserRoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@EntityListeners(value = {AuditingEntityListener.class})
-@Table(name = User.TABLE_NAME, uniqueConstraints = {
-        @UniqueConstraint(columnNames = User.USER_ID),
-        @UniqueConstraint(columnNames = User.USER_EMAIL)
-})
+@Document(collection = User.COLLECTION_NAME)
 public class User {
 
-    public static final String TABLE_NAME = "users";
+    public static final String COLLECTION_NAME = "user";
     public static final String USER_ID = "id";
     public static final String USER_NAME = "username";
     public static final String USER_EMAIL = "email";
@@ -34,29 +28,25 @@ public class User {
     public static final String LAST_UPDATED = "lastUpdated";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = USER_ID)
-    private Long userId;
+    @Field(value = USER_ID)
+    private String userId;
 
-    @Column(name = USER_NAME)
+    @Field(value = USER_NAME)
     private String userName;
 
-    @Column(name = USER_EMAIL)
+    @Field(value = USER_EMAIL)
     private String userEmail;
 
-    @Column(name = USER_PASSWORD)
+    @Field(value = USER_PASSWORD)
     private String userPassword;
 
-    @Column(name = USER_ROLE)
-    private UserRole userRole;
+    @Field(value = USER_ROLE)
+    private UserRoleEnum userRoleEnum;
 
-    @Column(name = CREATED_AT)
+    @Field(value = CREATED_AT)
     private LocalDateTime userCreatedAt;
 
-    @Column(name = LAST_UPDATED)
+    @Field(value = LAST_UPDATED)
     private LocalDateTime userLastUpdated;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Publication> publications;
 
 }

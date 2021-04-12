@@ -19,7 +19,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public GetAuthorResponse getAuthor(Long authorId) {
+    public GetAuthorResponse getAuthor(String authorId) {
         Author author = authorRepository.findByAuthorId(authorId);
         GetAuthorResponse response = new GetAuthorResponse();
         BeanUtils.copyProperties(author, response);

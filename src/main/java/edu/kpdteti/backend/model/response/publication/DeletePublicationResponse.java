@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeletePublicationResponse {
 
-    private Long publicationId;
-    private String publicationTitle;
+    private String message;
 
 }

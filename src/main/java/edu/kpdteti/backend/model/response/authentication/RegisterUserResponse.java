@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterUserResponse {
 
-    private Long userId;
+    private String userId;
     private String userName;
     private String userEmail;
 

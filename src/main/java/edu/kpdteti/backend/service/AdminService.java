@@ -5,11 +5,11 @@ import edu.kpdteti.backend.model.response.admin.*;
 
 public interface AdminService {
 
-    DeleteAuthorResponse deleteAuthor(Long authorId);
+    DeleteAuthorResponse deleteAuthor(String authorId);
 
-    DeleteTopicParentResponse deleteTopicParent(Long topicParentId);
+    DeleteTopicParentResponse deleteTopicParent(String topicParentId);
 
-    DeleteTopicResponse deleteTopic(Long topicId);
+    DeleteTopicResponse deleteTopic(String topicId);
 
     PostAuthorResponse postAuthor(PostAuthorRequest request);
 

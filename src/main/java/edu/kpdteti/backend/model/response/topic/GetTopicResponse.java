@@ -1,5 +1,6 @@
 package edu.kpdteti.backend.model.response.topic;
 
+import edu.kpdteti.backend.entity.dto.TopicParentDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetTopicResponse {
 
-    private Long topicId;
+    private String topicId;
     private String topicName;
+    private TopicParentDto topicParentDto;
 
 }
