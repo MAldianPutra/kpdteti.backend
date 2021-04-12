@@ -47,6 +47,7 @@ public class Topic {
     @Column(name = LAST_UPDATED)
     private LocalDateTime topicLastUpdated;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = TOPIC_PARENT_ID, nullable = false)
     private TopicParent topicParent;

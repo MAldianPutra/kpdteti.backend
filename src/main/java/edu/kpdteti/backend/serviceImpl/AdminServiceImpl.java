@@ -9,6 +9,7 @@ import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.repository.TopicParentRepository;
 import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.AdminService;
+import javassist.NotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,16 +100,23 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public PostTopicResponse postTopic(PostTopicRequest request) {
-        TopicParent topicParent = topicParentRepository.findByTopicParentId(request.getTopicParentId());
-        Topic topic = Topic.builder()
-                .topicParent(topicParent)
-                .topicCreatedAt(LocalDateTime.now())
-                .topicLastUpdated(LocalDateTime.now())
-                .build();
-        BeanUtils.copyProperties(request, topic);
-        Topic savedTopic = topicRepository.save(topic);
-        PostTopicResponse response = new PostTopicResponse();
-        BeanUtils.copyProperties(savedTopic, response);
-        return response;
+        if(topicParentRepository.existsById(request.getTopicParentId())) {
+            TopicParent topicParent = topicParentRepository.findByTopicParentId(request.getTopicParentId());
+            Topic topic = Topic.builder()
+                    .topicParent(topicParent)
+                    .topicCreatedAt(LocalDateTime.now())
+                    .topicLastUpdated(LocalDateTime.now())
+                    .build();
+            BeanUtils.copyProperties(request, topic);
+            Topic savedTopic = topicRepository.save(topic);
+            PostTopicResponse response = new PostTopicResponse();
+            BeanUtils.copyProperties(savedTopic, response);
+            response.setMessage("Success");
+            return response;
+        } else {
+            PostTopicResponse response = new PostTopicResponse();
+            response.setMessage("Failed, TopicParent not found.");
+            return response;
+        }
     }
 }

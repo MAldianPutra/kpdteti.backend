@@ -18,6 +18,6 @@ public class PostTopicResponse {
     private String topicName;
     private LocalDateTime topicCreatedAt;
     private LocalDateTime topicLastUpdated;
-    private TopicParent topicParent;
+    private String message;
 
 }
