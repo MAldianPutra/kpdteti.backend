@@ -56,8 +56,7 @@ public class User {
     @Column(name = LAST_UPDATED)
     private LocalDateTime userLastUpdated;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Publication> publications;
 
 }

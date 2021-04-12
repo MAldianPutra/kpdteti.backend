@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class TopicParentServiceImpl implements TopicParentService {
 
-    private TopicParentRepository topicParentRepository;
+    private final TopicParentRepository topicParentRepository;
 
     @Autowired
     public TopicParentServiceImpl(TopicParentRepository topicParentRepository) {
@@ -27,7 +27,9 @@ public class TopicParentServiceImpl implements TopicParentService {
         List<TopicParent> topicParents = topicParentRepository.findAll();
         List<TopicParentDto> topicParentDtos = new ArrayList<>();
         topicParents.forEach(topicParent -> topicParentDtos.add(toTopicParentDto(topicParent)));
-        return new GetAllTopicParentResponse(topicParentDtos);
+        GetAllTopicParentResponse response = new GetAllTopicParentResponse();
+        response.setTopicParentDtos(topicParentDtos);
+        return response;
     }
 
     private TopicParentDto toTopicParentDto(TopicParent topicParent) {

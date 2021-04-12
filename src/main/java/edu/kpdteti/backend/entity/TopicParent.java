@@ -44,7 +44,7 @@ public class TopicParent {
     private LocalDateTime topicParentLastUpdated;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "topicParent", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "topicParent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Topic> topics;
 
 }

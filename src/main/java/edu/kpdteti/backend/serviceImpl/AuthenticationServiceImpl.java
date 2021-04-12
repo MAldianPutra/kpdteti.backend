@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public AuthenticationServiceImpl(UserRepository userRepository) {
@@ -46,9 +46,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .userLastUpdated(LocalDateTime.now())
                 .build();
         BeanUtils.copyProperties(request, user);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
         RegisterUserResponse response = new RegisterUserResponse();
-        BeanUtils.copyProperties(user, response);
+        BeanUtils.copyProperties(savedUser, response);
         return response;
     }
 

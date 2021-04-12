@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -31,6 +32,8 @@ public class Author {
     public static final String AUTHOR_UNIVERSITY = "university";
     public static final String CREATED_AT = "createdAt";
     public static final String LAST_UPDATED = "lastUpdated";
+    public static final String PUBLICATION_ID = "id";
+    public static final String TABLE_AUTHOR_PUBLICATION = "authors_publications";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,8 +58,14 @@ public class Author {
     @Column(name = LAST_UPDATED)
     private LocalDateTime authorLastUpdated;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private Set<PublicationAuthor> publicationAuthors;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = TABLE_AUTHOR_PUBLICATION,
+        joinColumns = {
+            @JoinColumn(name = "author_id", referencedColumnName = AUTHOR_ID,
+                nullable = false, updatable = false)},
+        inverseJoinColumns = {
+            @JoinColumn(name = "publication_id", referencedColumnName = PUBLICATION_ID,
+                nullable = false, updatable = false)})
+    private Set<Publication> publications = new HashSet<>();
 
 }
