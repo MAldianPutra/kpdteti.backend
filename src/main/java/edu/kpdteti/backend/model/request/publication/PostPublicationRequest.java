@@ -21,8 +21,8 @@ public class PostPublicationRequest {
     private String publicationPublisher;
     private String publicationDescription;
     private List<String> otherAuthors;
-    private List<Author> authors;
-    private List<Topic> topics;
+    private List<String> authorIds;
+    private List<String> topicIds;
     private Boolean savePDF;
 
 

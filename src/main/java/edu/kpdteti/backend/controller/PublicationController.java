@@ -51,7 +51,7 @@ public class PublicationController {
         return new ResponseEntity<>(publicationService.getPublication(publicationId), HttpStatus.OK);
     }
 
-    @PostMapping(ApiPath.PUBLICATION)
+    @PostMapping(ApiPath.POST_PUBLICATION)
     public ResponseEntity<PostPublicationResponse> postPublication(@RequestBody PostPublicationRequest request) {
         return new ResponseEntity<>(publicationService.postPublication(request), HttpStatus.OK);
     }
