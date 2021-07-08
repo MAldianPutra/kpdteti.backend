@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface PublicationService {
 
-    DeletePublicationResponse deletePublication(Long publicationId);
+    DeletePublicationResponse deletePublication(String publicationId) throws ClassNotFoundException;
 
-    DownloadPublicationResponse downloadPublication(Long publicationId);
+    DownloadPublicationResponse downloadPublication(String publicationId);
 
-    List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(Long authorId);
+    List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId);
 
-    List<GetPublicationsByTopicResponse> getPublicationsByTopic(Long topicId);
+    List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId);
 
-    GetPublicationResponse getPublication(Long publicationId);
+    GetPublicationResponse getPublication(String publicationId);
 
     PostPublicationResponse postPublication(PostPublicationRequest request);
 

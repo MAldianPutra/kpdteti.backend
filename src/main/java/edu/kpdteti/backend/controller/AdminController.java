@@ -27,17 +27,17 @@ public class AdminController {
     }
 
     @DeleteMapping(ApiPath.ADMIN_AUTHOR)
-    public ResponseEntity<DeleteAuthorResponse> deleteAuthor(@RequestParam Long authorId) {
+    public ResponseEntity<DeleteAuthorResponse> deleteAuthor(@RequestParam String authorId) {
         return new ResponseEntity<>(adminService.deleteAuthor(authorId), HttpStatus.OK);
     }
 
     @DeleteMapping(ApiPath.ADMIN_TOPIC_PARENT)
-    public ResponseEntity<DeleteTopicParentResponse> deleteTopicParent(@RequestParam Long topicParentId) {
+    public ResponseEntity<DeleteTopicParentResponse> deleteTopicParent(@RequestParam String topicParentId) {
         return new ResponseEntity<>(adminService.deleteTopicParent(topicParentId), HttpStatus.OK);
     }
 
     @DeleteMapping(ApiPath.ADMIN_TOPIC)
-    public ResponseEntity<DeleteTopicResponse> deleteTopic(@RequestParam Long topicId) {
+    public ResponseEntity<DeleteTopicResponse> deleteTopic(@RequestParam String topicId) {
         return new ResponseEntity<>(adminService.deleteTopic(topicId), HttpStatus.OK);
     }
 

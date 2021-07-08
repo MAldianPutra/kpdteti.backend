@@ -1,16 +1,16 @@
 package edu.kpdteti.backend.repository;
 
 import edu.kpdteti.backend.entity.Topic;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface TopicRepository extends JpaRepository<Topic, Long> {
+public interface TopicRepository extends MongoRepository<Topic, String> {
 
-    Topic findByTopicId(Long topicId);
+    Topic findByTopicId(String topicId);
 
-    List<Topic> findAllByTopicParent_TopicParentId(Long topicParentId);
+    List<Topic> findAllByTopicParentDto_TopicParentId(String topicParentId);
 
 }

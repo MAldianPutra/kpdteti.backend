@@ -27,7 +27,7 @@ public class AuthorController {
     }
 
     @GetMapping(ApiPath.AUTHOR)
-    public ResponseEntity<GetAuthorResponse> getAuthor(@RequestParam Long authorId) {
+    public ResponseEntity<GetAuthorResponse> getAuthor(@RequestParam String authorId) {
         return new ResponseEntity<>(authorService.getAuthor(authorId), HttpStatus.OK);
     }
 

@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping(ApiPath.USER)
-    public ResponseEntity<GetUserResponse> getUser(@RequestParam Long userId) {
+    public ResponseEntity<GetUserResponse> getUser(@RequestParam String userId) {
         return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
     }
 

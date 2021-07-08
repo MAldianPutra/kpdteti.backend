@@ -20,7 +20,6 @@ public class ApiPath {
 
     // USER ENDPOINTS
     public static final String USER = API + "/users";
-    public static final String USER_UPDATE_PASSWORD = USER + "/update/password";
 
     // TOPIC PARENT ENDPOINTS
     public static final String TOPIC_PARENT = API + "/parents";
@@ -38,4 +37,7 @@ public class ApiPath {
     public static final String PUBLICATION = API + "/publications";
     public static final String PUBLICATION_DOWNLOAD = PUBLICATION + "/download";
 
+    // AUTHENTICATED ENDPOINTS
+    public static final String AUTH_ENDPOINTS = API + "/xpath";
+    public static final String POST_PUBLICATION = AUTH_ENDPOINTS + "/publications";
 }

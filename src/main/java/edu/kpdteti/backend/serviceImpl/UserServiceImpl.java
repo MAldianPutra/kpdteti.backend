@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GetUserResponse getUser(Long userId) {
+    public GetUserResponse getUser(String userId) {
         User user = userRepository.findByUserId(userId);
         GetUserResponse response = new GetUserResponse();
         BeanUtils.copyProperties(user, response);

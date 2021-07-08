@@ -1,65 +1,44 @@
 package edu.kpdteti.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.kpdteti.backend.entity.dto.TopicParentDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@EntityListeners(value = {AuditingEntityListener.class})
-@Table(name = Topic.TABLE_NAME, uniqueConstraints = {
-        @UniqueConstraint(columnNames = Topic.TOPIC_ID),
-        @UniqueConstraint(columnNames = Topic.TOPIC_NAME)
-})
+@Document(collection = Topic.COLLECTION_NAME)
 public class Topic {
 
-    public static final String TABLE_NAME = "topics";
+    public static final String COLLECTION_NAME = "topic";
     public static final String TOPIC_ID = "id";
-    public static final String TOPIC_PARENT_ID = "parentId";
+    public static final String TOPIC_PARENT = "topicParent";
     public static final String TOPIC_NAME = "name";
     public static final String CREATED_AT = "createdAt";
     public static final String LAST_UPDATED = "lastUpdated";
-    public static final String PUBLICATION_ID = "id";
-    public static final String TABLE_TOPIC_PUBLICATION = "topics_publications";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = TOPIC_ID)
-    private Long topicId;
+    @Field(value = TOPIC_ID)
+    private String topicId;
 
-    @Column(name = TOPIC_NAME)
+    @Field(value = TOPIC_NAME)
     private String topicName;
 
-    @Column(name = CREATED_AT)
+    @Field(value = TOPIC_PARENT)
+    private TopicParentDto topicParentDto;
+
+    @Field(value = CREATED_AT)
     private LocalDateTime topicCreatedAt;
 
-    @Column(name = LAST_UPDATED)
+    @Field(value = LAST_UPDATED)
     private LocalDateTime topicLastUpdated;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = TOPIC_PARENT_ID, nullable = false)
-    private TopicParent topicParent;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = TABLE_TOPIC_PUBLICATION,
-            joinColumns = {
-                    @JoinColumn(name = "topic_id", referencedColumnName = TOPIC_ID,
-                            nullable = false, updatable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "publication_id", referencedColumnName = PUBLICATION_ID,
-                            nullable = false, updatable = false)})
-    private Set<Publication> publications = new HashSet<>();
 
 }

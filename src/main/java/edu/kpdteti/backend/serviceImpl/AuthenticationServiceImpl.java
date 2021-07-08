@@ -1,7 +1,8 @@
 package edu.kpdteti.backend.serviceImpl;
 
 import edu.kpdteti.backend.entity.User;
-import edu.kpdteti.backend.enums.UserRole;
+import edu.kpdteti.backend.enums.IdGeneratorEnum;
+import edu.kpdteti.backend.enums.UserRoleEnum;
 import edu.kpdteti.backend.model.request.authentication.LoginUserRequest;
 import edu.kpdteti.backend.model.request.authentication.RegisterAdminRequest;
 import edu.kpdteti.backend.model.request.authentication.RegisterUserRequest;
@@ -10,6 +11,7 @@ import edu.kpdteti.backend.model.response.authentication.RegisterAdminResponse;
 import edu.kpdteti.backend.model.response.authentication.RegisterUserResponse;
 import edu.kpdteti.backend.repository.UserRepository;
 import edu.kpdteti.backend.service.AuthenticationService;
+import edu.kpdteti.backend.util.IdGenerator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,10 +24,12 @@ import java.time.LocalDateTime;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
+    private final IdGenerator idGenerator;
 
     @Autowired
-    public AuthenticationServiceImpl(UserRepository userRepository) {
+    public AuthenticationServiceImpl(UserRepository userRepository, IdGenerator idGenerator) {
         this.userRepository = userRepository;
+        this.idGenerator = idGenerator;
     }
 
     @Autowired
@@ -41,7 +45,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public RegisterUserResponse registerUser(RegisterUserRequest request) {
         User user = User.builder()
-                .userRole(UserRole.ROLE_USER)
+                .userId(idGenerator.generateId(IdGeneratorEnum.USER))
+                .userRoleEnum(UserRoleEnum.ROLE_USER)
                 .userCreatedAt(LocalDateTime.now())
                 .userLastUpdated(LocalDateTime.now())
                 .build();
@@ -55,14 +60,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public RegisterAdminResponse registerAdmin(RegisterAdminRequest request) {
         User user = User.builder()
-                .userRole(UserRole.ROLE_ADMIN)
+                .userId(idGenerator.generateId(IdGeneratorEnum.ADMIN))
+                .userRoleEnum(UserRoleEnum.ROLE_ADMIN)
                 .userCreatedAt(LocalDateTime.now())
                 .userLastUpdated(LocalDateTime.now())
                 .build();
         BeanUtils.copyProperties(request, user);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
         RegisterAdminResponse response = new RegisterAdminResponse();
-        BeanUtils.copyProperties(user, response);
+        BeanUtils.copyProperties(savedUser, response);
         return response;
     }
 }

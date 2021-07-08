@@ -1,12 +1,13 @@
 package edu.kpdteti.backend.model.response.publication;
 
-import edu.kpdteti.backend.entity.Author;
+import edu.kpdteti.backend.entity.dto.AuthorDto;
+import edu.kpdteti.backend.entity.dto.TopicDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
@@ -14,11 +15,13 @@ import java.util.Set;
 @NoArgsConstructor
 public class GetPublicationResponse {
 
-    private Long publicationId;
+    private String publicationId;
     private String publicationTitle;
     private String publicationDate;
     private String publicationDescription;
-    private String otherAuthor;
-    private Set<Author> authors;
+    private String publicationPath;
+    private List<String> otherAuthors;
+    private List<AuthorDto> authorDto;
+    private List<TopicDto> topicDto;
 
 }

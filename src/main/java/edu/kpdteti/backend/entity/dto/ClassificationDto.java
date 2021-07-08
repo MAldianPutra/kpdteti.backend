@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.model.dto;
+package edu.kpdteti.backend.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TopicDto {
+public class ClassificationDto {
 
-    private Long topicId;
-    private String topicName;
+    private String preprocessing;
+    private String result;
 
 }

@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.model.response.author;
+package edu.kpdteti.backend.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAuthorResponse {
+public class AuthorDto {
 
     private String authorId;
     private String authorName;
     private String authorEmail;
-    private String authorFaculty;
-    private String authorUniversity;
 
 }
