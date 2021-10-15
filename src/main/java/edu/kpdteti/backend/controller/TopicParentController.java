@@ -26,8 +26,8 @@ public class TopicParentController {
         this.topicParentService = topicParentService;
     }
 
-    @GetMapping(ApiPath.TOPIC_PARENT)
-    public ResponseEntity<List<GetAllTopicParentsResponse>> getAllTopicParent(){
+    @GetMapping(ApiPath.ALL_TOPIC_PARENT)
+    public ResponseEntity<List<GetAllTopicParentsResponse>> getAllTopicParents(){
         return new ResponseEntity<>(topicParentService.getAllTopicParents(), HttpStatus.OK);
     }
 }

@@ -23,6 +23,7 @@ public class ApiPath {
 
     // TOPIC PARENT ENDPOINTS
     public static final String TOPIC_PARENT = API + "/parents";
+    public static final String ALL_TOPIC_PARENT = TOPIC_PARENT + "/all";
 
     // TOPIC ENDPOINTS
     public static final String TOPIC = API + "/topics";
@@ -31,10 +32,12 @@ public class ApiPath {
 
     // AUTHOR ENDPOINTS
     public static final String AUTHOR = API + "/authors";
+    public static final String ALL_AUTHOR = AUTHOR + "/all";
     public static final String AUTHOR_PUBLICATIONS = AUTHOR + "/publications";
 
     // PUBLICATION ENDPOINTS
     public static final String PUBLICATION = API + "/publications";
+    public static final String ALL_PUBLICATION = PUBLICATION + "/all";
     public static final String PUBLICATION_DOWNLOAD = PUBLICATION + "/download";
 
     // AUTHENTICATED ENDPOINTS

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
@@ -13,11 +14,21 @@ import java.util.List;
 @NoArgsConstructor
 public class UpdatePublicationRequest {
 
+    @NotBlank
     private String publicationId;
+
+    @NotBlank
     private String publicationTitle;
+
+    @NotBlank
     private String publicationDate;
+
+    @NotBlank
     private String publicationPublisher;
+
+    @NotBlank
     private String publicationDescription;
+
     private List<String> otherAuthors;
 
 }

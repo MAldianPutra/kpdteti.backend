@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class TopicParentServiceImpl implements TopicParentService {
     @Override
     public List<GetAllTopicParentsResponse> getAllTopicParents() {
         List<TopicParent> topicParents = topicParentRepository.findAll();
+        if(topicParents.isEmpty()) {
+            throw new EntityNotFoundException("No Topic Parent in database");
+        }
         List<GetAllTopicParentsResponse> responses = new ArrayList<>();
         topicParents.forEach(topicParent -> {
             GetAllTopicParentsResponse response = new GetAllTopicParentsResponse();

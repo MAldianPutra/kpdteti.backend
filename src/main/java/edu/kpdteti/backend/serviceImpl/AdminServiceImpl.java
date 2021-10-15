@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
 @Service
@@ -44,31 +45,31 @@ public class AdminServiceImpl implements AdminService {
                     .message("Success")
                     .build();
         } else {
-            throw new RuntimeException("Fail, no Author with id " + authorId);
+            throw new EntityNotFoundException("Author not found with id " + authorId);
         }
     }
 
     @Override
     public DeleteTopicParentResponse deleteTopicParent(String topicParentId) {
-        try {
+        if(topicParentRepository.existsById(topicParentId)) {
             topicParentRepository.deleteById(topicParentId);
             return DeleteTopicParentResponse.builder()
                     .message("Success")
                     .build();
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("Fail, no TopicParent with id " + topicParentId);
+        } else {
+            throw new EntityNotFoundException("Topic Parent not found with id " + topicParentId);
         }
     }
 
     @Override
     public DeleteTopicResponse deleteTopic(String topicId) {
-        try {
+        if(topicRepository.existsById(topicId)) {
             topicRepository.deleteById(topicId);
             return DeleteTopicResponse.builder()
                     .message("Success")
                     .build();
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("Fail, no Topic with id " + topicId);
+        } else {
+            throw new EntityNotFoundException("Topic not found with id " + topicId);
         }
     }
 
@@ -102,23 +103,22 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public PostTopicResponse postTopic(PostTopicRequest request) {
-        try {
-            TopicParent topicParent = topicParentRepository.findByTopicParentId(request.getTopicParentId());
-            TopicParentDto topicParentDto = new TopicParentDto();
-            BeanUtils.copyProperties(topicParent, topicParentDto);
-            Topic topic = Topic.builder()
-                    .topicId(idGenerator.generateId(IdGeneratorEnum.TOPIC))
-                    .topicParentDto(topicParentDto)
-                    .topicCreatedAt(LocalDateTime.now())
-                    .topicLastUpdated(LocalDateTime.now())
-                    .build();
-            BeanUtils.copyProperties(request, topic);
-            Topic savedTopic = topicRepository.save(topic);
-            PostTopicResponse response = new PostTopicResponse();
-            BeanUtils.copyProperties(savedTopic, response);
-            return response;
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("Topic Parent Id wrong.");
+        TopicParent topicParent = topicParentRepository.findByTopicParentId(request.getTopicParentId());
+        if(topicParent == null) {
+            throw new EntityNotFoundException("Topic Parent not found with id " + request.getTopicParentId());
         }
+        TopicParentDto topicParentDto = new TopicParentDto();
+        BeanUtils.copyProperties(topicParent, topicParentDto);
+        Topic topic = Topic.builder()
+                .topicId(idGenerator.generateId(IdGeneratorEnum.TOPIC))
+                .topicParentDto(topicParentDto)
+                .topicCreatedAt(LocalDateTime.now())
+                .topicLastUpdated(LocalDateTime.now())
+                .build();
+        BeanUtils.copyProperties(request, topic);
+        Topic savedTopic = topicRepository.save(topic);
+        PostTopicResponse response = new PostTopicResponse();
+        BeanUtils.copyProperties(savedTopic, response);
+        return response;
     }
 }

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -15,15 +17,25 @@ import java.util.List;
 @NoArgsConstructor
 public class PostPublicationRequest {
 
+    @NotBlank
     private String userId;
+
+    @NotBlank
     private String publicationTitle;
+
+    @NotBlank
     private String publicationDate;
+
+    @NotBlank
     private String publicationPublisher;
+
+    @NotBlank
     private String publicationDescription;
+
     private List<String> otherAuthors;
     private List<String> authorIds;
-    private List<String> topicIds;
-    private Boolean savePDF;
 
+    @NotNull
+    private Boolean savePDF;
 
 }

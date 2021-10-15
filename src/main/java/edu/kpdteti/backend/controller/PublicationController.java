@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api
@@ -51,13 +52,18 @@ public class PublicationController {
         return new ResponseEntity<>(publicationService.getPublication(publicationId), HttpStatus.OK);
     }
 
+    @GetMapping(ApiPath.ALL_PUBLICATION)
+    public ResponseEntity<List<GetPublicationResponse>> getAllPublications() {
+        return new ResponseEntity<>(publicationService.getAllPublications(), HttpStatus.OK);
+    }
+
     @PostMapping(ApiPath.POST_PUBLICATION)
-    public ResponseEntity<PostPublicationResponse> postPublication(@RequestBody PostPublicationRequest request) {
+    public ResponseEntity<PostPublicationResponse> postPublication(@Valid @RequestBody PostPublicationRequest request) {
         return new ResponseEntity<>(publicationService.postPublication(request), HttpStatus.OK);
     }
 
     @PutMapping(ApiPath.PUBLICATION)
-    public ResponseEntity<UpdatePublicationResponse> updatePublication(@RequestBody UpdatePublicationRequest request) {
+    public ResponseEntity<UpdatePublicationResponse> updatePublication(@Valid @RequestBody UpdatePublicationRequest request) {
         return new ResponseEntity<>(publicationService.updatePublication(request), HttpStatus.OK);
     }
 

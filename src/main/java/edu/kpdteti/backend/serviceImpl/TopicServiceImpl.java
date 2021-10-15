@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public List<GetTopicsByTopicParentResponse> getTopicsByTopicParent(String topicParentId) {
         List<Topic> topics = topicRepository.findAllByTopicParentDto_TopicParentId(topicParentId);
+        if(topics.isEmpty()) {
+            throw new EntityNotFoundException("Topics not found with ParentId " + topicParentId);
+        }
         List<GetTopicsByTopicParentResponse> responses = new ArrayList<>();
         topics.forEach(topic -> {
             GetTopicsByTopicParentResponse response = new GetTopicsByTopicParentResponse();
@@ -37,6 +41,9 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public GetTopicResponse getTopic(String topicId) {
         Topic topic = topicRepository.findByTopicId(topicId);
+        if(topic == null) {
+            throw new EntityNotFoundException("Topic not found with id " + topicId);
+        }
         GetTopicResponse response = new GetTopicResponse();
         BeanUtils.copyProperties(topic, response);
         return response;

@@ -29,7 +29,7 @@ public class TopicController {
     }
 
     @GetMapping(ApiPath.TOPIC_BY_TOPIC_PARENT)
-    public ResponseEntity<List<GetTopicsByTopicParentResponse>> getTopicByTopicParent(@RequestParam String topicParentId){
+    public ResponseEntity<List<GetTopicsByTopicParentResponse>> getTopicsByTopicParent(@RequestParam String topicParentId){
         return new ResponseEntity<>(topicService.getTopicsByTopicParent(topicParentId), HttpStatus.OK);
     }
 

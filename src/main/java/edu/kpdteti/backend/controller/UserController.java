@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+
 @Api
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -23,7 +25,8 @@ public class UserController {
     }
 
     @GetMapping(ApiPath.USER)
-    public ResponseEntity<GetUserResponse> getUser(@RequestParam String userId) {
+    public ResponseEntity<GetUserResponse> getUser(@RequestParam String userId)
+            throws EntityNotFoundException {
         return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
     }
 

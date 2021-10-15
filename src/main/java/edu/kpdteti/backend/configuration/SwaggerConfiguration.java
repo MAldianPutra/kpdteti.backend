@@ -15,9 +15,11 @@ public class SwaggerConfiguration {
 
     @Bean
     public Docket api() {
+        System.out.println("Hey, I'm Swagger!");
         return new Docket(DocumentationType.SWAGGER_2).select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("edu.kpdteti.backend.controller"))
                 .build()
                 .genericModelSubstitutes(DeferredResult.class, ResponseEntity.class);
     }

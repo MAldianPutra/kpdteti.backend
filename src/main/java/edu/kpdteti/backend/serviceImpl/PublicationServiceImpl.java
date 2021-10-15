@@ -8,6 +8,7 @@ import edu.kpdteti.backend.entity.dto.TopicDto;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
+import edu.kpdteti.backend.model.response.author.GetAuthorResponse;
 import edu.kpdteti.backend.model.response.publication.*;
 import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.repository.PublicationRepository;
@@ -18,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,22 +42,22 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public DeletePublicationResponse deletePublication(String publicationId) {
-        try {
-            Publication publication = publicationRepository.findByPublicationId(publicationId);
-            publicationRepository.delete(publication);
-            DeletePublicationResponse response = new DeletePublicationResponse();
-            // Delete PDF, later
-            BeanUtils.copyProperties(publication, response);
-            return response;
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("No Publication with id " + publicationId);
+        if(publicationRepository.existsById(publicationId)) {
+            publicationRepository.deleteById(publicationId);
+            return DeletePublicationResponse.builder()
+                    .message("Success")
+                    .build();
+        } else {
+            throw new EntityNotFoundException("Publication not found with id " + publicationId);
         }
-
     }
 
     @Override
     public DownloadPublicationResponse downloadPublication(String publicationId) {
         Publication publication = publicationRepository.findByPublicationId(publicationId);
+        if(publication == null) {
+            throw new EntityNotFoundException("Publication not found with id " + publicationId);
+        }
         DownloadPublicationResponse response = new DownloadPublicationResponse();
         BeanUtils.copyProperties(publication, response);
         return response;
@@ -64,6 +66,9 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId) {
         List<Publication> publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId);
+        if(publications.isEmpty()) {
+            throw new EntityNotFoundException("Publication not found with authorId " + authorId);
+        }
         List<GetPublicationsByAuthorResponse> responses = new ArrayList<>();
         publications.forEach(publication -> {
             GetPublicationsByAuthorResponse response = new GetPublicationsByAuthorResponse();
@@ -76,6 +81,9 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId) {
         List<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId);
+        if(publications.isEmpty()) {
+            throw new EntityNotFoundException("Publication not found with topicId " + topicId);
+        }
         List<GetPublicationsByTopicResponse> responses = new ArrayList<>();
         publications.forEach(publication -> {
             GetPublicationsByTopicResponse response = new GetPublicationsByTopicResponse();
@@ -88,9 +96,27 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public GetPublicationResponse getPublication(String publicationId) {
         Publication publication = publicationRepository.findByPublicationId(publicationId);
+        if(publication == null) {
+            throw new EntityNotFoundException("Publication not found with id " + publicationId);
+        }
         GetPublicationResponse response = new GetPublicationResponse();
         BeanUtils.copyProperties(publication, response);
         return response;
+    }
+
+    @Override
+    public List<GetPublicationResponse> getAllPublications() {
+        List<Publication> publications = publicationRepository.findAll();
+        if(publications.isEmpty()) {
+            throw new EntityNotFoundException("No Publication in database");
+        }
+        List<GetPublicationResponse> responses = new ArrayList<>();
+        publications.forEach(publication -> {
+            GetPublicationResponse response = new GetPublicationResponse();
+            BeanUtils.copyProperties(publication, response);
+            responses.add(response);
+        });
+        return responses;
     }
 
     @Override
@@ -102,18 +128,23 @@ public class PublicationServiceImpl implements PublicationService {
             BeanUtils.copyProperties(author, authorDto);
             authorDtos.add(authorDto);
         });
-        List<TopicDto> topicDtos = new ArrayList<>();
-        request.getTopicIds().forEach(id -> {
-            Topic topic = topicRepository.findByTopicId(id);
-            TopicDto topicDto = new TopicDto();
-            BeanUtils.copyProperties(topic, topicDto);
-            topicDtos.add(topicDto);
-        });
-
+        if(authorDtos.isEmpty()) {
+            throw new EntityNotFoundException("Author not found with id " + request.getAuthorIds());
+        }
+//        List<TopicDto> topicDtos = new ArrayList<>();
+//        request.getTopicIds().forEach(id -> {
+//            Topic topic = topicRepository.findByTopicId(id);
+//            TopicDto topicDto = new TopicDto();
+//            BeanUtils.copyProperties(topic, topicDto);
+//            topicDtos.add(topicDto);
+//        });
+//        if(topicDtos.isEmpty()) {
+//            throw new EntityNotFoundException("Topic not found with id " + request.getTopicIds());
+//        }
         Publication publication = Publication.builder()
                 .publicationId(idGenerator.generateId(IdGeneratorEnum.PUBLICATION))
                 .authorDto(authorDtos)
-                .topicDto(topicDtos)
+//                .topicDto(topicDtos)
                 .publicationCreatedAt(LocalDateTime.now())
                 .publicationLastUpdated(LocalDateTime.now())
                 .build();
@@ -127,6 +158,9 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public UpdatePublicationResponse updatePublication(UpdatePublicationRequest request) {
         Publication publication = publicationRepository.findByPublicationId(request.getPublicationId());
+        if(publication == null) {
+            throw new EntityNotFoundException("Publication not found with id " + request.getPublicationId());
+        }
         BeanUtils.copyProperties(request, publication);
         publication.setPublicationLastUpdated(LocalDateTime.now());
         publicationRepository.save(publication);

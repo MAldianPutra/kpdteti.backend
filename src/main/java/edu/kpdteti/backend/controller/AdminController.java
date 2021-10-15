@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Api
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,17 +44,17 @@ public class AdminController {
     }
 
     @PostMapping(ApiPath.ADMIN_AUTHOR)
-    public ResponseEntity<PostAuthorResponse> postAuthor(@RequestBody PostAuthorRequest request) {
+    public ResponseEntity<PostAuthorResponse> postAuthor(@Valid @RequestBody PostAuthorRequest request) {
         return new ResponseEntity<>(adminService.postAuthor(request), HttpStatus.OK);
     }
 
     @PostMapping(ApiPath.ADMIN_TOPIC_PARENT)
-    public ResponseEntity<PostTopicParentResponse> postTopicParent(@RequestBody PostTopicParentRequest request) {
+    public ResponseEntity<PostTopicParentResponse> postTopicParent(@Valid @RequestBody PostTopicParentRequest request) {
         return new ResponseEntity<>(adminService.postTopicParent(request), HttpStatus.OK);
     }
 
     @PostMapping(ApiPath.ADMIN_TOPIC)
-    public ResponseEntity<PostTopicResponse> postTopic(@RequestBody PostTopicRequest request) {
+    public ResponseEntity<PostTopicResponse> postTopic(@Valid @RequestBody PostTopicRequest request) {
         return new ResponseEntity<>(adminService.postTopic(request), HttpStatus.OK);
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Api
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,6 +31,11 @@ public class AuthorController {
     @GetMapping(ApiPath.AUTHOR)
     public ResponseEntity<GetAuthorResponse> getAuthor(@RequestParam String authorId) {
         return new ResponseEntity<>(authorService.getAuthor(authorId), HttpStatus.OK);
+    }
+
+    @GetMapping(ApiPath.ALL_AUTHOR)
+    public ResponseEntity<List<GetAuthorResponse>> getAllAuthors() {
+        return new ResponseEntity<>(authorService.getAllAuthors(), HttpStatus.OK);
     }
 
 }

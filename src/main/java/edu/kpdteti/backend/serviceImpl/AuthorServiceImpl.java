@@ -8,6 +8,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
@@ -21,8 +25,26 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public GetAuthorResponse getAuthor(String authorId) {
         Author author = authorRepository.findByAuthorId(authorId);
+        if(author == null) {
+            throw new EntityNotFoundException("Author not found with id " + authorId);
+        }
         GetAuthorResponse response = new GetAuthorResponse();
         BeanUtils.copyProperties(author, response);
         return response;
+    }
+
+    @Override
+    public List<GetAuthorResponse> getAllAuthors() {
+        List<Author> authors = authorRepository.findAll();
+        if(authors.isEmpty()) {
+            throw new EntityNotFoundException("No Author in database");
+        }
+        List<GetAuthorResponse> responses = new ArrayList<>();
+        authors.forEach(author -> {
+            GetAuthorResponse response = new GetAuthorResponse();
+            BeanUtils.copyProperties(author, response);
+            responses.add(response);
+        });
+        return responses;
     }
 }

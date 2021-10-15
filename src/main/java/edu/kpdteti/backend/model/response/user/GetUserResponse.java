@@ -1,10 +1,7 @@
 package edu.kpdteti.backend.model.response.user;
 
 import edu.kpdteti.backend.enums.UserRoleEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder

@@ -18,6 +18,8 @@ public interface PublicationService {
 
     GetPublicationResponse getPublication(String publicationId);
 
+    List<GetPublicationResponse> getAllPublications();
+
     PostPublicationResponse postPublication(PostPublicationRequest request);
 
     UpdatePublicationResponse updatePublication(UpdatePublicationRequest request);
