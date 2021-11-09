@@ -43,8 +43,8 @@ public class PublicationController {
     }
 
     @GetMapping(ApiPath.TOPIC_PUBLICATIONS)
-    public ResponseEntity<List<GetPublicationsByTopicResponse>> getPublicationsByTopic(@RequestParam String topicId) {
-        return new ResponseEntity<>(publicationService.getPublicationsByTopic(topicId), HttpStatus.OK);
+    public ResponseEntity<List<GetPublicationsByTopicOrParentResponse>> getPublicationsByTopicOrParent(@RequestParam String topicId) {
+        return new ResponseEntity<>(publicationService.getPublicationsByTopicOrParent(topicId), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.PUBLICATION)

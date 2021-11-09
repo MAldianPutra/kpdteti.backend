@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetPublicationsByTopicResponse {
+public class GetPublicationsByTopicOrParentResponse {
 
     private String publicationId;
     private String publicationTitle;
@@ -24,6 +24,5 @@ public class GetPublicationsByTopicResponse {
     private String publicationPath;
     private List<String> otherAuthors;
     private List<AuthorDto> authorDto;
-    private List<TopicDto> topicDto;
 
 }

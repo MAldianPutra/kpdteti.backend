@@ -15,5 +15,4 @@ public interface PublicationRepository extends MongoRepository<Publication, Stri
 
     List<Publication> findAllByTopicDto_TopicId(String topicId);
 
-
 }

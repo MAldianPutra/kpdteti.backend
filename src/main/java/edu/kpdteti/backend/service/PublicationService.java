@@ -14,11 +14,11 @@ public interface PublicationService {
 
     List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId);
 
-    List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId);
-
-    GetPublicationResponse getPublication(String publicationId);
+    List<GetPublicationsByTopicOrParentResponse> getPublicationsByTopicOrParent(String topicOrParentId);
 
     List<GetPublicationResponse> getAllPublications();
+
+    GetPublicationResponse getPublication(String publicationId);
 
     PostPublicationResponse postPublication(PostPublicationRequest request);
 

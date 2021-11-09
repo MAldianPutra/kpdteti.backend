@@ -5,7 +5,6 @@ import edu.kpdteti.backend.model.request.admin.PostAuthorRequest;
 import edu.kpdteti.backend.model.request.admin.PostTopicParentRequest;
 import edu.kpdteti.backend.model.request.admin.PostTopicRequest;
 import edu.kpdteti.backend.model.response.admin.*;
-import edu.kpdteti.backend.model.response.publication.DeletePublicationResponse;
 import edu.kpdteti.backend.service.AdminService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;

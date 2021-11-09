@@ -4,11 +4,9 @@ import edu.kpdteti.backend.entity.Author;
 import edu.kpdteti.backend.entity.Publication;
 import edu.kpdteti.backend.entity.Topic;
 import edu.kpdteti.backend.entity.dto.AuthorDto;
-import edu.kpdteti.backend.entity.dto.TopicDto;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
-import edu.kpdteti.backend.model.response.author.GetAuthorResponse;
 import edu.kpdteti.backend.model.response.publication.*;
 import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.repository.PublicationRepository;
@@ -79,18 +77,42 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId) {
-        List<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId);
-        if(publications.isEmpty()) {
-            throw new EntityNotFoundException("Publication not found with topicId " + topicId);
+    public List<GetPublicationsByTopicOrParentResponse> getPublicationsByTopicOrParent(String topicOrParentId) {
+        if(topicOrParentId.startsWith("par-")) {
+            List<Topic> topics = topicRepository.findAllByTopicParentDto_TopicParentId(topicOrParentId);
+            if(topics.isEmpty()) {
+                throw new EntityNotFoundException("Publication not found with topicParentId " + topicOrParentId);
+            }
+            List<Publication> publications = new ArrayList<>();
+            topics.forEach(topic -> {
+                List<Publication> publicationsByTopic = publicationRepository
+                        .findAllByTopicDto_TopicId(topic.getTopicId());
+                publications.addAll(publicationsByTopic);
+            });
+            List<GetPublicationsByTopicOrParentResponse> responses = new ArrayList<>();
+            publications.forEach(publication -> {
+                GetPublicationsByTopicOrParentResponse response = new GetPublicationsByTopicOrParentResponse();
+                BeanUtils.copyProperties(publication, response);
+                responses.add(response);
+            });
+            return responses;
         }
-        List<GetPublicationsByTopicResponse> responses = new ArrayList<>();
-        publications.forEach(publication -> {
-            GetPublicationsByTopicResponse response = new GetPublicationsByTopicResponse();
-            BeanUtils.copyProperties(publication, response);
-            responses.add(response);
-        });
-        return responses;
+        if(topicOrParentId.startsWith("top-")) {
+            List<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicOrParentId);
+            if(publications.isEmpty()) {
+                throw new EntityNotFoundException("Publication not found with topicId " + topicOrParentId);
+            }
+            List<GetPublicationsByTopicOrParentResponse> responses = new ArrayList<>();
+            publications.forEach(publication -> {
+                GetPublicationsByTopicOrParentResponse response = new GetPublicationsByTopicOrParentResponse();
+                BeanUtils.copyProperties(publication, response);
+                responses.add(response);
+            });
+            return responses;
+        }
+        else {
+            throw new EntityNotFoundException("The ID " + topicOrParentId + " is not allowed or not found.");
+        }
     }
 
     @Override
