@@ -34,6 +34,7 @@ public class PostPublicationRequest {
 
     private List<String> otherAuthors;
     private List<String> authorIds;
+    private List<String> topicIds;
 
     @NotNull
     private Boolean savePDF;

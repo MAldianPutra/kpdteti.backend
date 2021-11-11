@@ -4,6 +4,7 @@ import edu.kpdteti.backend.entity.Author;
 import edu.kpdteti.backend.entity.Publication;
 import edu.kpdteti.backend.entity.Topic;
 import edu.kpdteti.backend.entity.dto.AuthorDto;
+import edu.kpdteti.backend.entity.dto.TopicDto;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
@@ -153,20 +154,20 @@ public class PublicationServiceImpl implements PublicationService {
         if(authorDtos.isEmpty()) {
             throw new EntityNotFoundException("Author not found with id " + request.getAuthorIds());
         }
-//        List<TopicDto> topicDtos = new ArrayList<>();
-//        request.getTopicIds().forEach(id -> {
-//            Topic topic = topicRepository.findByTopicId(id);
-//            TopicDto topicDto = new TopicDto();
-//            BeanUtils.copyProperties(topic, topicDto);
-//            topicDtos.add(topicDto);
-//        });
-//        if(topicDtos.isEmpty()) {
-//            throw new EntityNotFoundException("Topic not found with id " + request.getTopicIds());
-//        }
+        List<TopicDto> topicDtos = new ArrayList<>();
+        request.getTopicIds().forEach(id -> {
+            Topic topic = topicRepository.findByTopicId(id);
+            TopicDto topicDto = new TopicDto();
+            BeanUtils.copyProperties(topic, topicDto);
+            topicDtos.add(topicDto);
+        });
+        if(topicDtos.isEmpty()) {
+            throw new EntityNotFoundException("Topic not found with id " + request.getTopicIds());
+        }
         Publication publication = Publication.builder()
                 .publicationId(idGenerator.generateId(IdGeneratorEnum.PUBLICATION))
                 .authorDto(authorDtos)
-//                .topicDto(topicDtos)
+                .topicDto(topicDtos)
                 .publicationCreatedAt(LocalDateTime.now())
                 .publicationLastUpdated(LocalDateTime.now())
                 .build();
