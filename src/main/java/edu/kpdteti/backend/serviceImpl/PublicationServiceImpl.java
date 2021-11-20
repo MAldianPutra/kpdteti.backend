@@ -17,6 +17,7 @@ import edu.kpdteti.backend.util.IdGenerator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -155,14 +156,16 @@ public class PublicationServiceImpl implements PublicationService {
             throw new EntityNotFoundException("Author not found with id " + request.getAuthorIds());
         }
         List<TopicDto> topicDtos = new ArrayList<>();
-        request.getTopicIds().forEach(id -> {
-            Topic topic = topicRepository.findByTopicId(id);
-            TopicDto topicDto = new TopicDto();
-            BeanUtils.copyProperties(topic, topicDto);
-            topicDtos.add(topicDto);
-        });
-        if(topicDtos.isEmpty()) {
-            throw new EntityNotFoundException("Topic not found with id " + request.getTopicIds());
+        if(!CollectionUtils.isEmpty(request.getTopicIds())) {
+            request.getTopicIds().forEach(id -> {
+                Topic topic = topicRepository.findByTopicId(id);
+                TopicDto topicDto = new TopicDto();
+                BeanUtils.copyProperties(topic, topicDto);
+                topicDtos.add(topicDto);
+            });
+            if(topicDtos.isEmpty()) {
+                throw new EntityNotFoundException("Topic not found with id " + request.getTopicIds());
+            }
         }
         Publication publication = Publication.builder()
                 .publicationId(idGenerator.generateId(IdGeneratorEnum.PUBLICATION))
