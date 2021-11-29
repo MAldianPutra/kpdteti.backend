@@ -13,7 +13,7 @@ import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.repository.TopicParentRepository;
 import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.AdminService;
-import edu.kpdteti.backend.util.IdGenerator;
+import edu.kpdteti.backend.util.IdGeneratorUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,14 +27,14 @@ public class AdminServiceImpl implements AdminService {
     private final AuthorRepository authorRepository;
     private final TopicParentRepository topicParentRepository;
     private final TopicRepository topicRepository;
-    private final IdGenerator idGenerator;
+    private final IdGeneratorUtil idGeneratorUtil;
 
     @Autowired
-    public AdminServiceImpl(AuthorRepository authorRepository, TopicParentRepository topicParentRepository, TopicRepository topicRepository, IdGenerator idGenerator) {
+    public AdminServiceImpl(AuthorRepository authorRepository, TopicParentRepository topicParentRepository, TopicRepository topicRepository, IdGeneratorUtil idGeneratorUtil) {
         this.authorRepository = authorRepository;
         this.topicParentRepository = topicParentRepository;
         this.topicRepository = topicRepository;
-        this.idGenerator = idGenerator;
+        this.idGeneratorUtil = idGeneratorUtil;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public PostAuthorResponse postAuthor(PostAuthorRequest request) {
         Author author = Author.builder()
-                .authorId(idGenerator.generateId(IdGeneratorEnum.AUTHOR))
+                .authorId(idGeneratorUtil.generateId(IdGeneratorEnum.AUTHOR))
                 .authorCreatedAt(LocalDateTime.now())
                 .authorLastUpdated(LocalDateTime.now())
                 .build();
@@ -90,7 +90,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public PostTopicParentResponse postTopicParent(PostTopicParentRequest request) {
         TopicParent topicParent = TopicParent.builder()
-                .topicParentId(idGenerator.generateId(IdGeneratorEnum.TOPIC_PARENT))
+                .topicParentId(idGeneratorUtil.generateId(IdGeneratorEnum.TOPIC_PARENT))
                 .topicParentCreatedAt(LocalDateTime.now())
                 .topicParentLastUpdated(LocalDateTime.now())
                 .build();
@@ -110,7 +110,7 @@ public class AdminServiceImpl implements AdminService {
         TopicParentDto topicParentDto = new TopicParentDto();
         BeanUtils.copyProperties(topicParent, topicParentDto);
         Topic topic = Topic.builder()
-                .topicId(idGenerator.generateId(IdGeneratorEnum.TOPIC))
+                .topicId(idGeneratorUtil.generateId(IdGeneratorEnum.TOPIC))
                 .topicParentDto(topicParentDto)
                 .topicCreatedAt(LocalDateTime.now())
                 .topicLastUpdated(LocalDateTime.now())

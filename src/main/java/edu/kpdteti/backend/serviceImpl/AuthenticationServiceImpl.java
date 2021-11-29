@@ -11,7 +11,7 @@ import edu.kpdteti.backend.model.response.authentication.RegisterAdminResponse;
 import edu.kpdteti.backend.model.response.authentication.RegisterUserResponse;
 import edu.kpdteti.backend.repository.UserRepository;
 import edu.kpdteti.backend.service.AuthenticationService;
-import edu.kpdteti.backend.util.IdGenerator;
+import edu.kpdteti.backend.util.IdGeneratorUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,12 +24,12 @@ import java.time.LocalDateTime;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
-    private final IdGenerator idGenerator;
+    private final IdGeneratorUtil idGeneratorUtil;
 
     @Autowired
-    public AuthenticationServiceImpl(UserRepository userRepository, IdGenerator idGenerator) {
+    public AuthenticationServiceImpl(UserRepository userRepository, IdGeneratorUtil idGeneratorUtil) {
         this.userRepository = userRepository;
-        this.idGenerator = idGenerator;
+        this.idGeneratorUtil = idGeneratorUtil;
     }
 
     @Autowired
@@ -45,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public RegisterUserResponse registerUser(RegisterUserRequest request) {
         User user = User.builder()
-                .userId(idGenerator.generateId(IdGeneratorEnum.USER))
+                .userId(idGeneratorUtil.generateId(IdGeneratorEnum.USER))
                 .userRoleEnum(UserRoleEnum.ROLE_USER)
                 .userCreatedAt(LocalDateTime.now())
                 .userLastUpdated(LocalDateTime.now())
@@ -60,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public RegisterAdminResponse registerAdmin(RegisterAdminRequest request) {
         User user = User.builder()
-                .userId(idGenerator.generateId(IdGeneratorEnum.ADMIN))
+                .userId(idGeneratorUtil.generateId(IdGeneratorEnum.ADMIN))
                 .userRoleEnum(UserRoleEnum.ROLE_ADMIN)
                 .userCreatedAt(LocalDateTime.now())
                 .userLastUpdated(LocalDateTime.now())

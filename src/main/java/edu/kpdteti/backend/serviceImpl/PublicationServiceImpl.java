@@ -13,7 +13,7 @@ import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.repository.PublicationRepository;
 import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.PublicationService;
-import edu.kpdteti.backend.util.IdGenerator;
+import edu.kpdteti.backend.util.IdGeneratorUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,14 +30,14 @@ public class PublicationServiceImpl implements PublicationService {
     private final PublicationRepository publicationRepository;
     private final AuthorRepository authorRepository;
     private final TopicRepository topicRepository;
-    private final IdGenerator idGenerator;
+    private final IdGeneratorUtil idGeneratorUtil;
 
     @Autowired
-    public PublicationServiceImpl(PublicationRepository publicationRepository, AuthorRepository authorRepository, TopicRepository topicRepository, IdGenerator idGenerator) {
+    public PublicationServiceImpl(PublicationRepository publicationRepository, AuthorRepository authorRepository, TopicRepository topicRepository, IdGeneratorUtil idGeneratorUtil) {
         this.publicationRepository = publicationRepository;
         this.authorRepository = authorRepository;
         this.topicRepository = topicRepository;
-        this.idGenerator = idGenerator;
+        this.idGeneratorUtil = idGeneratorUtil;
     }
 
     @Override
@@ -168,7 +168,7 @@ public class PublicationServiceImpl implements PublicationService {
             }
         }
         Publication publication = Publication.builder()
-                .publicationId(idGenerator.generateId(IdGeneratorEnum.PUBLICATION))
+                .publicationId(idGeneratorUtil.generateId(IdGeneratorEnum.PUBLICATION))
                 .authorDto(authorDtos)
                 .topicDto(topicDtos)
                 .publicationCreatedAt(LocalDateTime.now())
