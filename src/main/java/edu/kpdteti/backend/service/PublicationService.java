@@ -3,7 +3,11 @@ package edu.kpdteti.backend.service;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
+import org.xml.sax.SAXException;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public interface PublicationService {
@@ -14,13 +18,13 @@ public interface PublicationService {
 
     List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId);
 
-    List<GetPublicationsByTopicOrParentResponse> getPublicationsByTopicOrParent(String topicOrParentId);
+    List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicOrParentId);
 
-    List<GetPublicationResponse> getAllPublications();
+    List<GetAllPublicationResponse> getAllPublications();
 
     GetPublicationResponse getPublication(String publicationId);
 
-    PostPublicationResponse postPublication(PostPublicationRequest request);
+    PostPublicationResponse postPublication(PostPublicationRequest request) throws URISyntaxException, SAXException, IOException, JAXBException;
 
     UpdatePublicationResponse updatePublication(UpdatePublicationRequest request);
 

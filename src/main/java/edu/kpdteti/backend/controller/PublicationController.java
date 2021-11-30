@@ -11,8 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.xml.sax.SAXException;
 
 import javax.validation.Valid;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @Api
@@ -43,8 +47,8 @@ public class PublicationController {
     }
 
     @GetMapping(ApiPath.TOPIC_PUBLICATIONS)
-    public ResponseEntity<List<GetPublicationsByTopicOrParentResponse>> getPublicationsByTopicOrParent(@RequestParam String topicOrParentId) {
-        return new ResponseEntity<>(publicationService.getPublicationsByTopicOrParent(topicOrParentId), HttpStatus.OK);
+    public ResponseEntity<List<GetPublicationsByTopicResponse>> getPublicationsByTopic(@RequestParam String topicId) {
+        return new ResponseEntity<>(publicationService.getPublicationsByTopic(topicId), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.PUBLICATION)
@@ -53,12 +57,12 @@ public class PublicationController {
     }
 
     @GetMapping(ApiPath.ALL_PUBLICATION)
-    public ResponseEntity<List<GetPublicationResponse>> getAllPublications() {
+    public ResponseEntity<List<GetAllPublicationResponse>> getAllPublications() {
         return new ResponseEntity<>(publicationService.getAllPublications(), HttpStatus.OK);
     }
 
     @PostMapping(ApiPath.POST_PUBLICATION)
-    public ResponseEntity<PostPublicationResponse> postPublication(@Valid @RequestBody PostPublicationRequest request) {
+    public ResponseEntity<PostPublicationResponse> postPublication(@Valid @RequestBody PostPublicationRequest request) throws SAXException, JAXBException, IOException, URISyntaxException {
         return new ResponseEntity<>(publicationService.postPublication(request), HttpStatus.OK);
     }
 

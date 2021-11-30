@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetTopicsByTopicParentResponse {
+public class GetTopicsByParentResponse {
 
     private String topicId;
     private String topicName;
+    private Integer topicLabel;
 
 }

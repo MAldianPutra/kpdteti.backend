@@ -2,7 +2,7 @@ package edu.kpdteti.backend.serviceImpl;
 
 import edu.kpdteti.backend.entity.Topic;
 import edu.kpdteti.backend.model.response.topic.GetTopicResponse;
-import edu.kpdteti.backend.model.response.topic.GetTopicsByTopicParentResponse;
+import edu.kpdteti.backend.model.response.topic.GetTopicsByParentResponse;
 import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.TopicService;
 import org.springframework.beans.BeanUtils;
@@ -24,14 +24,14 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<GetTopicsByTopicParentResponse> getTopicsByTopicParent(String topicParentId) {
-        List<Topic> topics = topicRepository.findAllByTopicParentDto_TopicParentId(topicParentId);
+    public List<GetTopicsByParentResponse> getTopicsByParent(String topicParentId) {
+        List<Topic> topics = topicRepository.findAllByTopicParentId(topicParentId);
         if(topics.isEmpty()) {
             throw new EntityNotFoundException("Topics not found with ParentId " + topicParentId);
         }
-        List<GetTopicsByTopicParentResponse> responses = new ArrayList<>();
+        List<GetTopicsByParentResponse> responses = new ArrayList<>();
         topics.forEach(topic -> {
-            GetTopicsByTopicParentResponse response = new GetTopicsByTopicParentResponse();
+            GetTopicsByParentResponse response = new GetTopicsByParentResponse();
             BeanUtils.copyProperties(topic, response);
             responses.add(response);
         });
@@ -48,5 +48,7 @@ public class TopicServiceImpl implements TopicService {
         BeanUtils.copyProperties(topic, response);
         return response;
     }
+
+
 
 }

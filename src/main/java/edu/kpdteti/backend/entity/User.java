@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -19,7 +20,6 @@ import java.time.LocalDateTime;
 public class User {
 
     public static final String COLLECTION_NAME = "user";
-    public static final String USER_ID = "id";
     public static final String USER_NAME = "username";
     public static final String USER_EMAIL = "email";
     public static final String USER_PASSWORD = "password";
@@ -28,13 +28,14 @@ public class User {
     public static final String LAST_UPDATED = "lastUpdated";
 
     @Id
-    @Field(value = USER_ID)
     private String userId;
 
     @Field(value = USER_NAME)
+    @Indexed(unique = true)
     private String userName;
 
     @Field(value = USER_EMAIL)
+    @Indexed(unique = true)
     private String userEmail;
 
     @Field(value = USER_PASSWORD)

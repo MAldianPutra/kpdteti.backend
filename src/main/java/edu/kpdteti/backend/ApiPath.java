@@ -16,14 +16,10 @@ public class ApiPath {
     public static final String ADMIN = API + "/admin";
     public static final String ADMIN_AUTHOR = ADMIN + "/authors";
     public static final String ADMIN_TOPIC = ADMIN + "/topics";
-    public static final String ADMIN_TOPIC_PARENT = ADMIN + "/topicParents";
+    public static final String ADMIN_TOPIC_POPULATE = ADMIN_TOPIC + "/populate";
 
     // USER ENDPOINTS
     public static final String USER = API + "/users";
-
-    // TOPIC PARENT ENDPOINTS
-    public static final String TOPIC_PARENT = API + "/parents";
-    public static final String ALL_TOPIC_PARENT = TOPIC_PARENT + "/all";
 
     // TOPIC ENDPOINTS
     public static final String TOPIC = API + "/topics";

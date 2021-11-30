@@ -14,10 +14,9 @@ import java.util.Map;
 @NoArgsConstructor
 public class ClassificationDto {
 
-    // Change this preprocessing later
-    private String preprocessing;
-
+    private String classificationId;
     private Map<String, ?> predictProbability;
     private List<Integer> predictResults;
+    private ClassificationReportDto classificationReport;
 
 }

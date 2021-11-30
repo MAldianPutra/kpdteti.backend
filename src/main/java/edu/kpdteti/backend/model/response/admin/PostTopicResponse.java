@@ -1,12 +1,9 @@
 package edu.kpdteti.backend.model.response.admin;
 
-import edu.kpdteti.backend.entity.dto.TopicParentDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -15,7 +12,8 @@ import java.time.LocalDateTime;
 public class PostTopicResponse {
 
     private String topicId;
+    private String topicParentId;
     private String topicName;
-    private TopicParentDto topicParentDto;
+    private Integer topicLabel;
 
 }

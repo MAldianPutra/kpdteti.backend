@@ -47,9 +47,13 @@ public class MLModelTest {
                 "application select from the specint2000 and BioBench suite exhibit visible performance improvement this be a upper bind on the " +
                 "achievable performance improvement in these architecture this article conclude that it may not be worth design specialized hardware " +
                 "to improve the prediction accuracy of the long latency branch";
-        MLModelUtil mlModelUtil = new MLModelUtil();
-        System.out.println("Text 1 prediction: " + mlModelUtil.predictText(text1));
-        System.out.println("Text 2 prediction: " + mlModelUtil.predictText(text2));
 
+        MLModelUtil mlModelUtil = new MLModelUtil();
+        Map<String, ?> text1PredictResult = mlModelUtil.predictText(text1);
+        System.out.println("Text 1 prediction: " + text1PredictResult);
+        System.out.println("Text 1 label: " + text1PredictResult.get("Label"));
+        Map<String, ?> text2PredictResult = mlModelUtil.predictText(text2);
+        System.out.println("Text 2 prediction: " + text2PredictResult);
+        System.out.println("Text 2 label: " + text2PredictResult.get("Label"));
     }
 }
