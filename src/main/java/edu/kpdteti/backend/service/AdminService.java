@@ -15,6 +15,8 @@ public interface AdminService {
 
     PostTopicResponse postTopic(PostTopicRequest request);
 
+    List<PopulateAuthorResponse> populateAuthor();
+
     List<PopulateTopicResponse> populateTopic();
 
 }

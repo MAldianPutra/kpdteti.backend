@@ -18,7 +18,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -39,21 +41,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public LoginUserResponse loginUser(LoginUserRequest request) {
-        return null;
+        User user = userRepository.findByUserEmail(request.getUserEmail());
+        if(user == null) {
+            throw new EntityNotFoundException("User not found with email " + request.getUserEmail());
+        }
+        return LoginUserResponse.builder()
+                .userName(user.getUserName())
+                .token(UUID.randomUUID().toString())
+                .build();
     }
 
     @Override
     public RegisterUserResponse registerUser(RegisterUserRequest request) {
         User user = User.builder()
                 .userId(idGeneratorUtil.generateId(IdGeneratorEnum.USER))
+                .userEmail(request.getUserEmail())
+                .userPassword(passwordEncoder().encode(request.getUserPassword()))
                 .userRoleEnum(UserRoleEnum.ROLE_USER)
                 .userCreatedAt(LocalDateTime.now())
                 .userLastUpdated(LocalDateTime.now())
                 .build();
-        BeanUtils.copyProperties(request, user);
-        User savedUser = userRepository.save(user);
+        userRepository.save(user);
         RegisterUserResponse response = new RegisterUserResponse();
-        BeanUtils.copyProperties(savedUser, response);
+        BeanUtils.copyProperties(user, response);
         return response;
     }
 
@@ -61,14 +71,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public RegisterAdminResponse registerAdmin(RegisterAdminRequest request) {
         User user = User.builder()
                 .userId(idGeneratorUtil.generateId(IdGeneratorEnum.ADMIN))
+                .userEmail(request.getUserEmail())
+                .userPassword(passwordEncoder().encode(request.getUserPassword()))
                 .userRoleEnum(UserRoleEnum.ROLE_ADMIN)
                 .userCreatedAt(LocalDateTime.now())
                 .userLastUpdated(LocalDateTime.now())
                 .build();
-        BeanUtils.copyProperties(request, user);
-        User savedUser = userRepository.save(user);
+        userRepository.save(user);
         RegisterAdminResponse response = new RegisterAdminResponse();
-        BeanUtils.copyProperties(savedUser, response);
+        BeanUtils.copyProperties(user, response);
         return response;
     }
 }

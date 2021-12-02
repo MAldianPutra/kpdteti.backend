@@ -10,6 +10,7 @@ import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.AdminService;
 import edu.kpdteti.backend.util.IdGeneratorUtil;
+import edu.kpdteti.backend.util.PopulateAuthorUtil;
 import edu.kpdteti.backend.util.PopulateTopicUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,16 @@ public class AdminServiceImpl implements AdminService {
     private final AuthorRepository authorRepository;
     private final TopicRepository topicRepository;
     private final IdGeneratorUtil idGeneratorUtil;
+    private final PopulateAuthorUtil populateAuthorUtil;
     private final PopulateTopicUtil populateTopicUtil;
 
     @Autowired
     public AdminServiceImpl(AuthorRepository authorRepository, TopicRepository topicRepository, IdGeneratorUtil idGeneratorUtil,
-                            PopulateTopicUtil populateTopicUtil) {
+                            PopulateAuthorUtil populateAuthorUtil, PopulateTopicUtil populateTopicUtil) {
         this.authorRepository = authorRepository;
         this.topicRepository = topicRepository;
         this.idGeneratorUtil = idGeneratorUtil;
+        this.populateAuthorUtil = populateAuthorUtil;
         this.populateTopicUtil = populateTopicUtil;
     }
 
@@ -94,6 +97,19 @@ public class AdminServiceImpl implements AdminService {
         PostTopicResponse response = new PostTopicResponse();
         BeanUtils.copyProperties(savedTopic, response);
         return response;
+    }
+
+    @Override
+    public List<PopulateAuthorResponse> populateAuthor() {
+        List<Author> authors = populateAuthorUtil.populateAuthor();
+        List<PopulateAuthorResponse> responses = new ArrayList<>();
+        authors.forEach(author -> {
+            authorRepository.save(author);
+            PopulateAuthorResponse response = new PopulateAuthorResponse();
+            BeanUtils.copyProperties(author, response);
+            responses.add(response);
+        });
+        return responses;
     }
 
     @Override

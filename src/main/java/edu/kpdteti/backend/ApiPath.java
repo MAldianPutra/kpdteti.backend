@@ -15,6 +15,7 @@ public class ApiPath {
     // ADMIN ENDPOINTS
     public static final String ADMIN = API + "/admin";
     public static final String ADMIN_AUTHOR = ADMIN + "/authors";
+    public static final String ADMIN_AUTHOR_POPULATE = ADMIN_AUTHOR + "/populate";
     public static final String ADMIN_TOPIC = ADMIN + "/topics";
     public static final String ADMIN_TOPIC_POPULATE = ADMIN_TOPIC + "/populate";
 

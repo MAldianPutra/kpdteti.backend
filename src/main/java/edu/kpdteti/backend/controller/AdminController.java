@@ -47,6 +47,12 @@ public class AdminController {
         return new ResponseEntity<>(adminService.postTopic(request), HttpStatus.OK);
     }
 
+    @PostMapping(ApiPath.ADMIN_AUTHOR_POPULATE)
+    public ResponseEntity<List<PopulateAuthorResponse>> populateAuthor() {
+        return new ResponseEntity<>(adminService.populateAuthor(), HttpStatus.OK);
+    }
+
+
     @PostMapping(ApiPath.ADMIN_TOPIC_POPULATE)
     public ResponseEntity<List<PopulateTopicResponse>> populateTopic() {
         return new ResponseEntity<>(adminService.populateTopic(), HttpStatus.OK);
