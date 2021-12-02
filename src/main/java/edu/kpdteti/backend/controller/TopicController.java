@@ -1,6 +1,7 @@
 package edu.kpdteti.backend.controller;
 
 import edu.kpdteti.backend.ApiPath;
+import edu.kpdteti.backend.model.response.topic.GetAllTopicResponse;
 import edu.kpdteti.backend.model.response.topic.GetTopicResponse;
 import edu.kpdteti.backend.model.response.topic.GetTopicsByParentResponse;
 import edu.kpdteti.backend.service.TopicService;
@@ -31,6 +32,11 @@ public class TopicController {
     @GetMapping(ApiPath.TOPIC_BY_TOPIC_PARENT)
     public ResponseEntity<List<GetTopicsByParentResponse>> getTopicsByParent(@RequestParam String topicParentId) {
         return new ResponseEntity<>(topicService.getTopicsByParent(topicParentId), HttpStatus.OK);
+    }
+
+    @GetMapping(ApiPath.TOPIC_ALL)
+    public ResponseEntity<List<GetAllTopicResponse>> getAllTopics() {
+        return new ResponseEntity<>(topicService.getAllTopic(), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.TOPIC)

@@ -23,6 +23,7 @@ public class ApiPath {
 
     // TOPIC ENDPOINTS
     public static final String TOPIC = API + "/topics";
+    public static final String TOPIC_ALL = TOPIC + "/all";
     public static final String TOPIC_BY_TOPIC_PARENT = TOPIC + "/parents";
     public static final String TOPIC_PUBLICATIONS = TOPIC + "/publications";
 

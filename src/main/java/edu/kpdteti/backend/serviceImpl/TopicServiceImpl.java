@@ -1,6 +1,7 @@
 package edu.kpdteti.backend.serviceImpl;
 
 import edu.kpdteti.backend.entity.Topic;
+import edu.kpdteti.backend.model.response.topic.GetAllTopicResponse;
 import edu.kpdteti.backend.model.response.topic.GetTopicResponse;
 import edu.kpdteti.backend.model.response.topic.GetTopicsByParentResponse;
 import edu.kpdteti.backend.repository.TopicRepository;
@@ -32,6 +33,18 @@ public class TopicServiceImpl implements TopicService {
         List<GetTopicsByParentResponse> responses = new ArrayList<>();
         topics.forEach(topic -> {
             GetTopicsByParentResponse response = new GetTopicsByParentResponse();
+            BeanUtils.copyProperties(topic, response);
+            responses.add(response);
+        });
+        return responses;
+    }
+
+    @Override
+    public List<GetAllTopicResponse> getAllTopic() {
+        List<Topic> topics = topicRepository.findAll();
+        List<GetAllTopicResponse> responses = new ArrayList<>();
+        topics.forEach(topic -> {
+            GetAllTopicResponse response = new GetAllTopicResponse();
             BeanUtils.copyProperties(topic, response);
             responses.add(response);
         });

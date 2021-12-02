@@ -163,7 +163,7 @@ public class PublicationServiceImpl implements PublicationService {
                 .lemmatizedText(lemmatizedText)
                 .build();
 
-        // Build and Save Classification
+        // Build
         Classification classification = Classification.builder()
                 .classificationId(idGeneratorUtil.generateId(IdGeneratorEnum.CLASSIFICATION))
                 .classificationReport(classificationReportDto)
@@ -172,7 +172,6 @@ public class PublicationServiceImpl implements PublicationService {
                 .classificationCreatedAt(LocalDateTime.now())
                 .classificationLastUpdated(LocalDateTime.now())
                 .build();
-        classificationRepository.save(classification);
 
         // Get Author Ids and Dtos
         List<AuthorDto> authorDtos = new ArrayList<>();
@@ -217,8 +216,9 @@ public class PublicationServiceImpl implements PublicationService {
                 .build();
         BeanUtils.copyProperties(request, publication);
 
-        // Save the Publication
+        // Save the Publication and Classification
         Publication savedPublication = publicationRepository.save(publication);
+        classificationRepository.save(classification);
         PostPublicationResponse response = new PostPublicationResponse();
 
         // Build and Return Response
