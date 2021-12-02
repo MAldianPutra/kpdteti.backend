@@ -24,7 +24,6 @@ public class UpdatePublicationResponse {
     private String publicationKeyword;
     private String publicationPath;
     private ClassificationDto classificationDto;
-    private Boolean savePDF;
     private List<String> otherAuthors;
     private List<AuthorDto> authorDto;
     private List<TopicDto> topicDto;

@@ -27,10 +27,6 @@ public class PostPublicationRequest {
     private String publicationKeyword;
     private String publicationPublisher;
     private String publicationDate;
-
-    @NotNull
-    private Boolean savePDF;
-
     private List<String> otherAuthors;
     private List<String> authorIds;
 

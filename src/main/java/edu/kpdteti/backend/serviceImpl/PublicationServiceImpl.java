@@ -17,12 +17,14 @@ import edu.kpdteti.backend.repository.ClassificationRepository;
 import edu.kpdteti.backend.repository.PublicationRepository;
 import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.PublicationService;
+import edu.kpdteti.backend.util.FileUploadUtil;
 import edu.kpdteti.backend.util.IdGeneratorUtil;
 import edu.kpdteti.backend.util.MLModelUtil;
 import edu.kpdteti.backend.util.TextPreprocessingUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
 import javax.persistence.EntityNotFoundException;
@@ -41,6 +43,7 @@ public class PublicationServiceImpl implements PublicationService {
     private final AuthorRepository authorRepository;
     private final TopicRepository topicRepository;
     private final ClassificationRepository classificationRepository;
+    private final FileUploadUtil fileUploadUtil;
     private final IdGeneratorUtil idGeneratorUtil;
     private final MLModelUtil mlModelUtil;
     private final TextPreprocessingUtil textPreprocessingUtil;
@@ -48,12 +51,13 @@ public class PublicationServiceImpl implements PublicationService {
     @Autowired
     public PublicationServiceImpl(PublicationRepository publicationRepository, AuthorRepository authorRepository,
                                   TopicRepository topicRepository, ClassificationRepository classificationRepository,
-                                  IdGeneratorUtil idGeneratorUtil, MLModelUtil mlModelUtil,
+                                  FileUploadUtil fileUploadUtil, IdGeneratorUtil idGeneratorUtil, MLModelUtil mlModelUtil,
                                   TextPreprocessingUtil textPreprocessingUtil) {
         this.publicationRepository = publicationRepository;
         this.authorRepository = authorRepository;
         this.topicRepository = topicRepository;
         this.classificationRepository = classificationRepository;
+        this.fileUploadUtil = fileUploadUtil;
         this.idGeneratorUtil = idGeneratorUtil;
         this.mlModelUtil = mlModelUtil;
         this.textPreprocessingUtil = textPreprocessingUtil;
@@ -220,6 +224,21 @@ public class PublicationServiceImpl implements PublicationService {
         // Build and Return Response
         BeanUtils.copyProperties(savedPublication, response);
         return response;
+    }
+
+    @Override
+    public UploadPublicationResponse uploadPublication(String publicationId, MultipartFile file) throws IOException, URISyntaxException {
+        Publication publication = publicationRepository.findByPublicationId(publicationId);
+        if (publication == null) {
+            throw new EntityNotFoundException("Publication not found with id " + publicationId);
+        }
+        publication.setPublicationPath(fileUploadUtil.uploadFile(publicationId, file));
+        publicationRepository.save(publication);
+        return UploadPublicationResponse.builder()
+                .message("Success")
+                .publicationId(publicationId)
+                .publicationPath(publication.getPublicationPath())
+                .build();
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
 import javax.validation.Valid;
@@ -64,6 +65,12 @@ public class PublicationController {
     @PostMapping(ApiPath.POST_PUBLICATION)
     public ResponseEntity<PostPublicationResponse> postPublication(@Valid @RequestBody PostPublicationRequest request) throws SAXException, JAXBException, IOException, URISyntaxException {
         return new ResponseEntity<>(publicationService.postPublication(request), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ApiPath.PUBLICATION_UPLOAD, consumes = "multipart/form-data")
+    public ResponseEntity<UploadPublicationResponse> uploadPublication(@RequestParam ("id") String publicationId,
+                                                                       @RequestParam ("file") MultipartFile file) throws IOException, URISyntaxException {
+        return new ResponseEntity<>(publicationService.uploadPublication(publicationId, file), HttpStatus.OK);
     }
 
     @PutMapping(ApiPath.PUBLICATION)
