@@ -34,6 +34,8 @@ public class AuthenticationController {
 
     @PostMapping(ApiPath.LOGIN)
     public ResponseEntity<LoginUserResponse> loginUser(@Valid @RequestBody LoginUserRequest request) {
+        System.out.println(request.getUserEmail());
+        System.out.println(request.getUserPassword());
         return new ResponseEntity<>(authenticationService.loginUser(request), HttpStatus.OK);
     }
 

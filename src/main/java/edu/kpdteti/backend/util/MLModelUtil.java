@@ -30,7 +30,6 @@ public class MLModelUtil {
                 .load(modelPath.toFile()).build();
 
         /* Get the text input */
-        FieldName targetName = evaluator.getTargetFields().get(0).getName();
         List<InputField> inputFields = evaluator.getInputFields();
         Map<String, String> features = new HashMap<>();
         features.put("Text", completeText);

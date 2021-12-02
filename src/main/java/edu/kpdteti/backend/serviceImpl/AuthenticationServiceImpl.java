@@ -46,6 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new EntityNotFoundException("User not found with email " + request.getUserEmail());
         }
         return LoginUserResponse.builder()
+                .userId(user.getUserId())
                 .userName(user.getUserName())
                 .token(UUID.randomUUID().toString())
                 .build();
@@ -56,6 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = User.builder()
                 .userId(idGeneratorUtil.generateId(IdGeneratorEnum.USER))
                 .userEmail(request.getUserEmail())
+                .userName(request.getUserName())
                 .userPassword(passwordEncoder().encode(request.getUserPassword()))
                 .userRoleEnum(UserRoleEnum.ROLE_USER)
                 .userCreatedAt(LocalDateTime.now())

@@ -5,5 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ClassificationRepository extends MongoRepository<Classification, String> {
 
+    Classification findClassificationByClassificationId(String classificationId);
 
 }

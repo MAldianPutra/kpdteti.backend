@@ -39,6 +39,9 @@ public class ApiPath {
     public static final String PUBLICATION_DOWNLOAD = PUBLICATION + "/download";
     public static final String PUBLICATION_UPLOAD = PUBLICATION + "/upload";
 
+    // CLASSIFICATION ENDPOINTS
+    public static final String CLASSIFICATION = API + "/classifications";
+
     // AUTHENTICATED ENDPOINTS
     public static final String AUTH_ENDPOINTS = API + "/xpath";
     public static final String POST_PUBLICATION = AUTH_ENDPOINTS + "/publications";
