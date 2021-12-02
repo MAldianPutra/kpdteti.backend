@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class TopicDto {
 
     private String topicId;
+    private String topicParentId;
     private String topicName;
-    private TopicParentDto topicParent;
+    private Integer topicLabel;
 
 }

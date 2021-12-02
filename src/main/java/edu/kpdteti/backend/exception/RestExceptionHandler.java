@@ -1,5 +1,6 @@
 package edu.kpdteti.backend.exception;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,17 @@ import javax.persistence.EntityNotFoundException;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {EntityNotFoundException.class})
-    protected ResponseEntity<Object> handleNotFound(
-            RuntimeException ex, WebRequest request) {
-
+    protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
         ApiException apiException = new ApiException(HttpStatus.NOT_FOUND,
+                ex.getMessage(), request);
+
+        return handleExceptionInternal(ex, apiException,
+                new HttpHeaders(), apiException.getStatus(), request);
+    }
+
+    @ExceptionHandler(value = {DuplicateKeyException.class})
+    protected ResponseEntity<Object> handleDuplicateKey(RuntimeException ex, WebRequest request) {
+        ApiException apiException = new ApiException(HttpStatus.METHOD_NOT_ALLOWED,
                 ex.getMessage(), request);
 
         return handleExceptionInternal(ex, apiException,

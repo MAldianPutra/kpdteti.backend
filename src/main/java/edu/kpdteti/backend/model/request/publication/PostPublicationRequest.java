@@ -1,7 +1,5 @@
 package edu.kpdteti.backend.model.request.publication;
 
-import edu.kpdteti.backend.entity.Author;
-import edu.kpdteti.backend.entity.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,19 +22,12 @@ public class PostPublicationRequest {
     private String publicationTitle;
 
     @NotBlank
-    private String publicationDate;
+    private String publicationAbstract;
 
-    @NotBlank
+    private String publicationKeyword;
     private String publicationPublisher;
-
-    @NotBlank
-    private String publicationDescription;
-
+    private String publicationDate;
     private List<String> otherAuthors;
     private List<String> authorIds;
-    private List<String> topicIds;
-
-    @NotNull
-    private Boolean savePDF;
 
 }

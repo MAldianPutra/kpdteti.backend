@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteTopicParentResponse {
+public class PopulateTopicResponse {
 
-    private String message;
+    private String topicId;
+    private String topicName;
+    private Integer topicLabel;
 
 }

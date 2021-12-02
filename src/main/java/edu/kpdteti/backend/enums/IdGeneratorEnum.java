@@ -6,8 +6,8 @@ public enum IdGeneratorEnum {
     ADMIN("adm-"),
     AUTHOR("aut-"),
     PUBLICATION("pub-"),
-    TOPIC("top-"),
-    TOPIC_PARENT("par-");
+    CLASSIFICATION("cla-"),
+    TOPIC("top-");
 
     private String idGeneratorEnum;
 

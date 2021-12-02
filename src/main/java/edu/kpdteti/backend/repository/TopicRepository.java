@@ -11,6 +11,10 @@ public interface TopicRepository extends MongoRepository<Topic, String> {
 
     Topic findByTopicId(String topicId);
 
-    List<Topic> findAllByTopicParentDto_TopicParentId(String topicParentId);
+    Topic findByTopicParentId(String topicParentId);
+
+    Topic findByTopicLabel(Integer topicLabel);
+
+    List<Topic> findAllByTopicParentId(String topicParentId);
 
 }

@@ -20,10 +20,10 @@ import java.util.Map;
 @Service
 public class MLModelUtil {
 
-    public Integer predictText(String completeText) throws JAXBException, SAXException, IOException, URISyntaxException {
+    public Map<String, ?> predictText(String completeText) throws JAXBException, SAXException, IOException, URISyntaxException {
 
         /* Get the model */
-        URL modelURL = MLModelUtil.class.getClassLoader().getResource("model/svm_model_tier_one_with_tfidf.pmml");
+        URL modelURL = MLModelUtil.class.getClassLoader().getResource("model/lr_model_tier_one_with_tfidf.pmml");
         File file = Paths.get(modelURL.toURI()).toFile();
         Path modelPath = Paths.get(file.getAbsolutePath());
         Evaluator evaluator = new LoadingModelEvaluatorBuilder()
@@ -45,10 +45,7 @@ public class MLModelUtil {
 
         /* Predict a text and return the list */
         Map<FieldName, ?> results = evaluator.evaluate(arguments);
-        Map<String, ?> resultRecord = EvaluatorUtil.decodeAll(results);
-        return (Integer) resultRecord.get(targetName.toString());
+        return EvaluatorUtil.decodeAll(results);
     }
-
-
 
 }

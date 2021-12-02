@@ -16,17 +16,14 @@ public class ApiPath {
     public static final String ADMIN = API + "/admin";
     public static final String ADMIN_AUTHOR = ADMIN + "/authors";
     public static final String ADMIN_TOPIC = ADMIN + "/topics";
-    public static final String ADMIN_TOPIC_PARENT = ADMIN + "/topicParents";
+    public static final String ADMIN_TOPIC_POPULATE = ADMIN_TOPIC + "/populate";
 
     // USER ENDPOINTS
     public static final String USER = API + "/users";
 
-    // TOPIC PARENT ENDPOINTS
-    public static final String TOPIC_PARENT = API + "/parents";
-    public static final String ALL_TOPIC_PARENT = TOPIC_PARENT + "/all";
-
     // TOPIC ENDPOINTS
     public static final String TOPIC = API + "/topics";
+    public static final String TOPIC_ALL = TOPIC + "/all";
     public static final String TOPIC_BY_TOPIC_PARENT = TOPIC + "/parents";
     public static final String TOPIC_PUBLICATIONS = TOPIC + "/publications";
 
@@ -39,6 +36,7 @@ public class ApiPath {
     public static final String PUBLICATION = API + "/publications";
     public static final String ALL_PUBLICATION = PUBLICATION + "/all";
     public static final String PUBLICATION_DOWNLOAD = PUBLICATION + "/download";
+    public static final String PUBLICATION_UPLOAD = PUBLICATION + "/upload";
 
     // AUTHENTICATED ENDPOINTS
     public static final String AUTH_ENDPOINTS = API + "/xpath";
