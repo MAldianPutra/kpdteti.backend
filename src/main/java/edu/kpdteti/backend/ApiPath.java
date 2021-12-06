@@ -36,6 +36,7 @@ public class ApiPath {
     // PUBLICATION ENDPOINTS
     public static final String PUBLICATION = API + "/publications";
     public static final String ALL_PUBLICATION = PUBLICATION + "/all";
+    public static final String SEARCH_PUBLICATION = PUBLICATION + "/search";
     public static final String PUBLICATION_DOWNLOAD = PUBLICATION + "/download";
     public static final String PUBLICATION_UPLOAD = PUBLICATION + "/upload";
 

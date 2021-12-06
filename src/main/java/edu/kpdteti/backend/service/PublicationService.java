@@ -1,6 +1,8 @@
 package edu.kpdteti.backend.service;
 
+import edu.kpdteti.backend.enums.SearchTypeEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
+import edu.kpdteti.backend.model.request.publication.SearchPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,8 @@ public interface PublicationService {
     List<GetAllPublicationResponse> getAllPublications();
 
     GetPublicationResponse getPublication(String publicationId);
+
+    List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType);
 
     PostPublicationResponse postPublication(PostPublicationRequest request) throws URISyntaxException, SAXException, IOException, JAXBException;
 

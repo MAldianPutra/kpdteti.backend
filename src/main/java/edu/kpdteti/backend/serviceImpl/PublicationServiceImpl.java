@@ -9,7 +9,9 @@ import edu.kpdteti.backend.entity.dto.ClassificationDto;
 import edu.kpdteti.backend.entity.dto.ClassificationReportDto;
 import edu.kpdteti.backend.entity.dto.TopicDto;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
+import edu.kpdteti.backend.enums.SearchTypeEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
+import edu.kpdteti.backend.model.request.publication.SearchPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
 import edu.kpdteti.backend.repository.AuthorRepository;
@@ -125,6 +127,29 @@ public class PublicationServiceImpl implements PublicationService {
         GetPublicationResponse response = new GetPublicationResponse();
         BeanUtils.copyProperties(publication, response);
         return response;
+    }
+
+    @Override
+    public List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType) {
+        List<Publication> publications = new ArrayList<>();
+        switch (searchType) {
+            case TITLE:
+                publications = publicationRepository.findAllByPublicationTitleContaining(searchKey);
+                break;
+            case TOPIC:
+                publications = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey);
+                break;
+            case AUTHOR:
+                publications = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey);
+                break;
+        }
+        List<SearchPublicationResponse> responses = new ArrayList<>();
+        publications.forEach(publication -> {
+            SearchPublicationResponse response = new SearchPublicationResponse();
+            BeanUtils.copyProperties(publication, response);
+            responses.add(response);
+        });
+        return responses;
     }
 
     @Override

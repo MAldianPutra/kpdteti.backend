@@ -1,7 +1,9 @@
 package edu.kpdteti.backend.controller;
 
 import edu.kpdteti.backend.ApiPath;
+import edu.kpdteti.backend.enums.SearchTypeEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
+import edu.kpdteti.backend.model.request.publication.SearchPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
 import edu.kpdteti.backend.service.PublicationService;
@@ -55,6 +57,12 @@ public class PublicationController {
     @GetMapping(ApiPath.PUBLICATION)
     public ResponseEntity<GetPublicationResponse> getPublication(@RequestParam String publicationId) {
         return new ResponseEntity<>(publicationService.getPublication(publicationId), HttpStatus.OK);
+    }
+
+    @GetMapping(ApiPath.SEARCH_PUBLICATION)
+    public ResponseEntity<List<SearchPublicationResponse>> searchPublication(@RequestParam String searchKey,
+                                                                             @RequestParam SearchTypeEnum searchType) {
+        return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.ALL_PUBLICATION)
