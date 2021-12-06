@@ -135,12 +135,21 @@ public class PublicationServiceImpl implements PublicationService {
         switch (searchType) {
             case TITLE:
                 publications = publicationRepository.findAllByPublicationTitleContaining(searchKey);
+                if(publications.isEmpty()) {
+                    throw new EntityNotFoundException("Publication not found with title " + searchKey);
+                }
                 break;
             case TOPIC:
                 publications = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey);
+                if(publications.isEmpty()) {
+                    throw new EntityNotFoundException("Publication not found with topic " + searchKey);
+                }
                 break;
             case AUTHOR:
                 publications = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey);
+                if(publications.isEmpty()) {
+                    throw new EntityNotFoundException("Publication not found with author " + searchKey);
+                }
                 break;
         }
         List<SearchPublicationResponse> responses = new ArrayList<>();
