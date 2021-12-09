@@ -17,8 +17,6 @@ public class FileUploadUtil {
             URL modelURL = FileUploadUtil.class.getClassLoader().getResource("publication/");
             String publicationPath = Paths.get(modelURL.toURI()).toString() + "/" + publicationId + ".pdf";
             File file = new File(publicationPath);
-            System.out.println(file.getAbsolutePath());
-            System.out.println(file.getPath());
             if (!file.exists()) {
                 file.mkdirs();
             } else {
@@ -27,7 +25,7 @@ public class FileUploadUtil {
             multipartFile.transferTo(file);
             return file.getAbsolutePath();
         } catch (Exception e) {
-            throw new IOException("File cannot be uploaded with id " + publicationId + ". Check if publication folder exists.");
+            throw new IOException("File cannot be uploaded with id " + publicationId + ". Create a 'publication' folder in target/classes.");
         }
     }
 
