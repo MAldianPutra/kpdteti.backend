@@ -13,18 +13,23 @@ import java.nio.file.Paths;
 public class FileUploadUtil {
 
     public String uploadFile(String publicationId, MultipartFile multipartFile) throws IOException, URISyntaxException {
-        URL modelURL = FileUploadUtil.class.getClassLoader().getResource("publication/");
-        String publicationPath = Paths.get(modelURL.toURI()).toString() + "/" + publicationId + ".pdf";
-        File file = new File(publicationPath);
-        System.out.println(file.getAbsolutePath());
-        System.out.println(file.getPath());
-        if (!file.exists()) {
-            file.mkdirs();
-        } else {
-            file.delete();
+        try {
+            URL modelURL = FileUploadUtil.class.getClassLoader().getResource("publication/");
+            String publicationPath = Paths.get(modelURL.toURI()).toString() + "/" + publicationId + ".pdf";
+            File file = new File(publicationPath);
+            System.out.println(file.getAbsolutePath());
+            System.out.println(file.getPath());
+            if (!file.exists()) {
+                file.mkdirs();
+            } else {
+                file.delete();
+            }
+            multipartFile.transferTo(file);
+            return file.getAbsolutePath();
+        } catch (Exception e) {
+            throw new IOException("File cannot be uploaded with id " + publicationId);
         }
-        multipartFile.transferTo(file);
-        return file.getAbsolutePath();
+
     }
 
 }

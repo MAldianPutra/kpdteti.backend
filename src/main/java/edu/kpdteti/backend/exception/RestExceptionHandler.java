@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -27,6 +28,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {DuplicateKeyException.class})
     protected ResponseEntity<Object> handleDuplicateKey(RuntimeException ex, WebRequest request) {
         ApiException apiException = new ApiException(HttpStatus.METHOD_NOT_ALLOWED,
+                ex.getMessage(), request);
+
+        return handleExceptionInternal(ex, apiException,
+                new HttpHeaders(), apiException.getStatus(), request);
+    }
+
+    @ExceptionHandler(value = {IOException.class})
+    protected ResponseEntity<Object> handleIOException(RuntimeException ex, WebRequest request) {
+        ApiException apiException = new ApiException(HttpStatus.UNPROCESSABLE_ENTITY,
                 ex.getMessage(), request);
 
         return handleExceptionInternal(ex, apiException,
