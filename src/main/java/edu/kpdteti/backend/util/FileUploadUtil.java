@@ -27,9 +27,8 @@ public class FileUploadUtil {
             multipartFile.transferTo(file);
             return file.getAbsolutePath();
         } catch (Exception e) {
-            throw new IOException("File cannot be uploaded with id " + publicationId);
+            throw new IOException("File cannot be uploaded with id " + publicationId + ". Check if publication folder exists.");
         }
-
     }
 
 }

@@ -35,13 +35,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {IOException.class})
-    protected ResponseEntity<Object> handleIOException(RuntimeException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleIOException(IOException ex, WebRequest request) {
         ApiException apiException = new ApiException(HttpStatus.UNPROCESSABLE_ENTITY,
                 ex.getMessage(), request);
 
         return handleExceptionInternal(ex, apiException,
                 new HttpHeaders(), apiException.getStatus(), request);
     }
+
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid
