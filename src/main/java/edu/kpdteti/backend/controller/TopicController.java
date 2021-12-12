@@ -1,8 +1,9 @@
 package edu.kpdteti.backend.controller;
 
 import edu.kpdteti.backend.ApiPath;
-import edu.kpdteti.backend.model.response.topic.GetTopicsByTopicParentResponse;
+import edu.kpdteti.backend.model.response.topic.GetAllTopicResponse;
 import edu.kpdteti.backend.model.response.topic.GetTopicResponse;
+import edu.kpdteti.backend.model.response.topic.GetTopicsByParentResponse;
 import edu.kpdteti.backend.service.TopicService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,13 @@ public class TopicController {
     }
 
     @GetMapping(ApiPath.TOPIC_BY_TOPIC_PARENT)
-    public ResponseEntity<List<GetTopicsByTopicParentResponse>> getTopicsByTopicParent(@RequestParam String topicParentId){
-        return new ResponseEntity<>(topicService.getTopicsByTopicParent(topicParentId), HttpStatus.OK);
+    public ResponseEntity<List<GetTopicsByParentResponse>> getTopicsByParent(@RequestParam String topicParentId) {
+        return new ResponseEntity<>(topicService.getTopicsByParent(topicParentId), HttpStatus.OK);
+    }
+
+    @GetMapping(ApiPath.TOPIC_ALL)
+    public ResponseEntity<List<GetAllTopicResponse>> getAllTopics() {
+        return new ResponseEntity<>(topicService.getAllTopic(), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.TOPIC)

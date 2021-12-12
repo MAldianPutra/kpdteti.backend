@@ -15,5 +15,10 @@ public interface PublicationRepository extends MongoRepository<Publication, Stri
 
     List<Publication> findAllByTopicDto_TopicId(String topicId);
 
+    List<Publication> findAllByPublicationTitleContaining(String publicationTitle);
+
+    List<Publication> findAllByTopicDto_TopicNameContaining(String topicName);
+
+    List<Publication> findAllByAuthorDto_AuthorNameContaining(String authorName);
 
 }

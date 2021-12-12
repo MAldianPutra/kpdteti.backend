@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -16,7 +17,9 @@ public class PostTopicRequest {
     @NotBlank
     private String topicName;
 
-    @NotBlank
-    private String topicParentId;
+    @NotNull
+    private Integer topicLabel;
+
+    private String optTopicParentId;
 
 }

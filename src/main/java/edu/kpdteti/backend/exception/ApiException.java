@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 @Data
 public class ApiException {
-    private LocalDateTime timestamp;
+    private String timestamp;
     private HttpStatus status;
     private String message;
     private String path;
 
     public ApiException(HttpStatus status, String message, WebRequest request) {
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = LocalDateTime.now().toString();
         this.status = status;
         this.message = message;
         this.path = ((ServletWebRequest) request).getRequest().getRequestURI();

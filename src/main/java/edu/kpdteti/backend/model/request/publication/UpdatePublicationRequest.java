@@ -29,6 +29,4 @@ public class UpdatePublicationRequest {
     @NotBlank
     private String publicationDescription;
 
-    private List<String> otherAuthors;
-
 }

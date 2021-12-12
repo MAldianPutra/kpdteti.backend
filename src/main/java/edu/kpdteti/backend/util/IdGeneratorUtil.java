@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class IdGenerator {
+public class IdGeneratorUtil {
 
     public String generateId(IdGeneratorEnum generationType) {
         String uuid = UUID.randomUUID().toString();

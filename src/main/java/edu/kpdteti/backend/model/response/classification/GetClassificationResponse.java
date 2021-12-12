@@ -1,5 +1,6 @@
-package edu.kpdteti.backend.entity.dto;
+package edu.kpdteti.backend.model.response.classification;
 
+import edu.kpdteti.backend.entity.dto.ClassificationReportDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +13,11 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClassificationDto {
+public class GetClassificationResponse {
 
-    private String classificationId;
     private Map<String, ?> predictProbability;
     private List<Integer> predictResults;
     private ClassificationReportDto classificationReport;
+    private String message;
 
 }

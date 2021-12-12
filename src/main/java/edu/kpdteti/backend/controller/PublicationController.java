@@ -1,7 +1,9 @@
 package edu.kpdteti.backend.controller;
 
 import edu.kpdteti.backend.ApiPath;
+import edu.kpdteti.backend.enums.SearchTypeEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
+import edu.kpdteti.backend.model.request.publication.SearchPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
 import edu.kpdteti.backend.service.PublicationService;
@@ -11,8 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
 import javax.validation.Valid;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @Api
@@ -52,14 +59,26 @@ public class PublicationController {
         return new ResponseEntity<>(publicationService.getPublication(publicationId), HttpStatus.OK);
     }
 
+    @GetMapping(ApiPath.SEARCH_PUBLICATION)
+    public ResponseEntity<List<SearchPublicationResponse>> searchPublication(@RequestParam String searchKey,
+                                                                             @RequestParam SearchTypeEnum searchType) {
+        return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType), HttpStatus.OK);
+    }
+
     @GetMapping(ApiPath.ALL_PUBLICATION)
-    public ResponseEntity<List<GetPublicationResponse>> getAllPublications() {
+    public ResponseEntity<List<GetAllPublicationResponse>> getAllPublications() {
         return new ResponseEntity<>(publicationService.getAllPublications(), HttpStatus.OK);
     }
 
     @PostMapping(ApiPath.POST_PUBLICATION)
-    public ResponseEntity<PostPublicationResponse> postPublication(@Valid @RequestBody PostPublicationRequest request) {
+    public ResponseEntity<PostPublicationResponse> postPublication(@Valid @RequestBody PostPublicationRequest request) throws SAXException, JAXBException, IOException, URISyntaxException {
         return new ResponseEntity<>(publicationService.postPublication(request), HttpStatus.OK);
+    }
+
+    @PostMapping(value = ApiPath.PUBLICATION_UPLOAD, consumes = "multipart/form-data")
+    public ResponseEntity<UploadPublicationResponse> uploadPublication(@RequestParam ("id") String publicationId,
+                                                                       @RequestParam ("file") MultipartFile file) throws IOException, URISyntaxException {
+        return new ResponseEntity<>(publicationService.uploadPublication(publicationId, file), HttpStatus.OK);
     }
 
     @PutMapping(ApiPath.PUBLICATION)

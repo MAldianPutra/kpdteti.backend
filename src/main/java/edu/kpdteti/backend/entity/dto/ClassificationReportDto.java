@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TopicParentDto {
+public class ClassificationReportDto {
 
-    private String topicParentId;
-    private String topicParentName;
+    private String concatText;
+    private String symbolRemovedText;
+    private String lemmatizedText;
 
 }

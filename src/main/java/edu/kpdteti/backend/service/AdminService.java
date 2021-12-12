@@ -3,18 +3,20 @@ package edu.kpdteti.backend.service;
 import edu.kpdteti.backend.model.request.admin.*;
 import edu.kpdteti.backend.model.response.admin.*;
 
+import java.util.List;
+
 public interface AdminService {
 
     DeleteAuthorResponse deleteAuthor(String authorId);
-
-    DeleteTopicParentResponse deleteTopicParent(String topicParentId);
 
     DeleteTopicResponse deleteTopic(String topicId);
 
     PostAuthorResponse postAuthor(PostAuthorRequest request);
 
-    PostTopicParentResponse postTopicParent(PostTopicParentRequest request);
-
     PostTopicResponse postTopic(PostTopicRequest request);
+
+    List<PopulateAuthorResponse> populateAuthor();
+
+    List<PopulateTopicResponse> populateTopic();
 
 }

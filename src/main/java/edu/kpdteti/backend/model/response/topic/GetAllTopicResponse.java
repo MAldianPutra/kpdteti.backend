@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.model.response.topicParent;
+package edu.kpdteti.backend.model.response.topic;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAllTopicParentsResponse {
+public class GetAllTopicResponse {
 
+    private String topicId;
     private String topicParentId;
-    private String topicParentName;
+    private String topicName;
+
 }

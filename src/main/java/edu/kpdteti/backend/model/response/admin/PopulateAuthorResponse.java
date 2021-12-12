@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostTopicParentResponse {
+public class PopulateAuthorResponse {
 
-    private String topicParentId;
-    private String topicParentName;
-    private LocalDateTime topicParentCreatedAt;
+    private String authorId;
+    private String authorName;
+    private String authorEmail;
+    private String authorFaculty;
+    private String authorUniversity;
 
 }
