@@ -13,6 +13,7 @@ public class LoginUserResponse {
 
     private String userId;
     private String userName;
+    private Boolean isAdmin;
     private String token;
 
 }
