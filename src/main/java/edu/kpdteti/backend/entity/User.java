@@ -31,7 +31,6 @@ public class User {
     private String userId;
 
     @Field(value = USER_NAME)
-    @Indexed(unique = true)
     private String userName;
 
     @Field(value = USER_EMAIL)

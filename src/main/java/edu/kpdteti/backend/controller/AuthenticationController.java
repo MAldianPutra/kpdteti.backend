@@ -34,18 +34,16 @@ public class AuthenticationController {
 
     @PostMapping(ApiPath.LOGIN)
     public ResponseEntity<LoginUserResponse> loginUser(@Valid @RequestBody LoginUserRequest request) {
-        System.out.println(request.getUserEmail());
-        System.out.println(request.getUserPassword());
         return new ResponseEntity<>(authenticationService.loginUser(request), HttpStatus.OK);
     }
 
     @PostMapping(ApiPath.REGISTER)
     public ResponseEntity<RegisterUserResponse> registerUser(@Valid @RequestBody RegisterUserRequest request) {
-        return new ResponseEntity<>(authenticationService.registerUser(request), HttpStatus.OK);
+        return new ResponseEntity<>(authenticationService.registerUser(request), HttpStatus.CREATED);
     }
 
     @PostMapping(ApiPath.REGISTER_ADMIN)
     public ResponseEntity<RegisterAdminResponse> registerAdmin(@Valid @RequestBody RegisterAdminRequest request) {
-        return new ResponseEntity<>(authenticationService.registerAdmin(request), HttpStatus.OK);
+        return new ResponseEntity<>(authenticationService.registerAdmin(request), HttpStatus.CREATED);
     }
 }

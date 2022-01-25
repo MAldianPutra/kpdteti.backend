@@ -39,22 +39,21 @@ public class AdminController {
 
     @PostMapping(ApiPath.ADMIN_AUTHOR)
     public ResponseEntity<PostAuthorResponse> postAuthor(@Valid @RequestBody PostAuthorRequest request) {
-        return new ResponseEntity<>(adminService.postAuthor(request), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.postAuthor(request), HttpStatus.CREATED);
     }
 
     @PostMapping(ApiPath.ADMIN_TOPIC)
     public ResponseEntity<PostTopicResponse> postTopic(@Valid @RequestBody PostTopicRequest request) {
-        return new ResponseEntity<>(adminService.postTopic(request), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.postTopic(request), HttpStatus.CREATED);
     }
 
     @PostMapping(ApiPath.ADMIN_AUTHOR_POPULATE)
     public ResponseEntity<List<PopulateAuthorResponse>> populateAuthor() {
-        return new ResponseEntity<>(adminService.populateAuthor(), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.populateAuthor(), HttpStatus.CREATED);
     }
-
 
     @PostMapping(ApiPath.ADMIN_TOPIC_POPULATE)
     public ResponseEntity<List<PopulateTopicResponse>> populateTopic() {
-        return new ResponseEntity<>(adminService.populateTopic(), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.populateTopic(), HttpStatus.CREATED);
     }
 }

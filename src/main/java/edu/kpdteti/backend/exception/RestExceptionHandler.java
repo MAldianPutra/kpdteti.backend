@@ -27,7 +27,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {DuplicateKeyException.class})
     protected ResponseEntity<Object> handleDuplicateKey(RuntimeException ex, WebRequest request) {
-        ApiException apiException = new ApiException(HttpStatus.METHOD_NOT_ALLOWED,
+        ApiException apiException = new ApiException(HttpStatus.CONFLICT,
                 ex.getMessage(), request);
 
         return handleExceptionInternal(ex, apiException,
@@ -42,8 +42,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, apiException,
                 new HttpHeaders(), apiException.getStatus(), request);
     }
-
-
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid

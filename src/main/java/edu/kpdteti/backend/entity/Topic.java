@@ -32,6 +32,7 @@ public class Topic {
     private String topicParentId;
 
     @Field(value = TOPIC_NAME)
+    @Indexed(unique = true)
     private String topicName;
 
     @Field(value = TOPIC_LABEL)
