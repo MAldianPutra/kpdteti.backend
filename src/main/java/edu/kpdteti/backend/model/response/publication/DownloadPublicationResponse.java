@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class DownloadPublicationResponse {
 
     private String publicationPath;
+    private String publicationTitle;
 
 }

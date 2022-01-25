@@ -83,9 +83,10 @@ public class PublicationServiceImpl implements PublicationService {
         if (publication == null) {
             throw new EntityNotFoundException("Publication not found with id " + publicationId);
         }
-        DownloadPublicationResponse response = new DownloadPublicationResponse();
-        BeanUtils.copyProperties(publication, response);
-        return response;
+        return DownloadPublicationResponse.builder()
+                .publicationPath(publication.getPublicationPath())
+                .publicationTitle(publication.getPublicationTitle() + ".pdf")
+                .build();
     }
 
     @Override

@@ -9,6 +9,9 @@ import edu.kpdteti.backend.model.response.publication.*;
 import edu.kpdteti.backend.service.PublicationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,9 @@ import javax.validation.Valid;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Api
@@ -40,8 +46,23 @@ public class PublicationController {
     }
 
     @GetMapping(ApiPath.PUBLICATION_DOWNLOAD)
-    public ResponseEntity<DownloadPublicationResponse> downloadPublication(@RequestParam String publicationId) {
-        return new ResponseEntity<>(publicationService.downloadPublication(publicationId), HttpStatus.OK);
+    public ResponseEntity<Resource> downloadPublication(@RequestParam String publicationId) throws IOException {
+        try {
+            DownloadPublicationResponse response = publicationService.downloadPublication(publicationId);
+            Path path = Paths.get(response.getPublicationPath());
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=\"" + response.getPublicationTitle() + "\"");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+
+        } catch (IOException ex) {
+            throw new IOException("File cannot be downloaded");
+        }
     }
 
     @GetMapping(ApiPath.AUTHOR_PUBLICATIONS)
