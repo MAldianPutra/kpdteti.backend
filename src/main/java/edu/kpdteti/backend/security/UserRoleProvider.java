@@ -1,5 +1,6 @@
-package edu.kpdteti.backend.model.response.authentication;
+package edu.kpdteti.backend.security;
 
+import edu.kpdteti.backend.enums.UserRoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,11 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginUserResponse {
+public class UserRoleProvider {
 
     private String userId;
-    private String userName;
-    private Boolean isAdmin;
-    private String token;
+    private UserRoleEnum userRoleEnum;
 
 }

@@ -45,11 +45,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if(user == null) {
             throw new EntityNotFoundException("User not found with email " + request.getUserEmail());
         }
-        return LoginUserResponse.builder()
+        LoginUserResponse response = LoginUserResponse.builder()
                 .userId(user.getUserId())
                 .userName(user.getUserName())
+                .isAdmin(Boolean.FALSE)
                 .token(UUID.randomUUID().toString())
                 .build();
+        if (user.getUserRoleEnum() == UserRoleEnum.ROLE_ADMIN) {
+            response.setIsAdmin(Boolean.TRUE);
+        }
+        return response;
     }
 
     @Override
