@@ -217,8 +217,6 @@ public class PublicationServiceImpl implements PublicationService {
         topicProbability.put("Computing Methodologies", probability.get(9));
         topicProbability.put("Applied Computing", probability.get(10));
 
-
-
         // Get Classification Report
         ClassificationReportDto classificationReportDto = ClassificationReportDto.builder()
                 .concatText(concatText)
