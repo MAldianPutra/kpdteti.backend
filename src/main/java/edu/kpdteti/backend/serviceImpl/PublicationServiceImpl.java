@@ -23,8 +23,12 @@ import edu.kpdteti.backend.util.FileUploadUtil;
 import edu.kpdteti.backend.util.IdGeneratorUtil;
 import edu.kpdteti.backend.util.MLModelUtil;
 import edu.kpdteti.backend.util.TextPreprocessingUtil;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
@@ -33,8 +37,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +96,8 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId) {
-        List<Publication> publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId);
+    public List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId, Integer page) {
+        List<Publication> publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId, PageRequest.of(page, 10, Sort.by("productName").ascending()));
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("Publication not found with authorId " + authorId);
         }
@@ -105,8 +111,8 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId) {
-        List<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId);
+    public List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId, Integer page) {
+        List<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId, PageRequest.of(page, 10, Sort.by("productName").ascending()));
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("Publication not found with topicId " + topicId);
         }
@@ -131,23 +137,23 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType) {
+    public List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType, Integer page) {
         List<Publication> publications = new ArrayList<>();
         switch (searchType) {
             case TITLE:
-                publications = publicationRepository.findAllByPublicationTitleContaining(searchKey);
+                publications = publicationRepository.findAllByPublicationTitleContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
                 if(publications.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with title " + searchKey);
                 }
                 break;
             case TOPIC:
-                publications = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey);
+                publications = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
                 if(publications.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with topic " + searchKey);
                 }
                 break;
             case AUTHOR:
-                publications = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey);
+                publications = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
                 if(publications.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with author " + searchKey);
                 }
@@ -163,8 +169,8 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<GetAllPublicationResponse> getAllPublications() {
-        List<Publication> publications = publicationRepository.findAll();
+    public List<GetAllPublicationResponse> getAllPublications(Integer page) {
+        Page<Publication> publications = publicationRepository.findAll(PageRequest.of(page, 20, Sort.by("productName").ascending()));
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("No Publication in database");
         }
@@ -187,9 +193,31 @@ public class PublicationServiceImpl implements PublicationService {
 
         // ML Model to get Classification
         Map<String, ?> predictProbability = mlModelUtil.predictText(lemmatizedText);
+
+        // Get Topic with Highest Probability
         Integer topicWithHighestProbability = (Integer) predictProbability.get("Label");
         List<Integer> predictResults = new ArrayList<>();
         predictResults.add(topicWithHighestProbability);
+
+        // Get TopicProbability
+        DecimalFormat decimalFormatter = new DecimalFormat("#.####");
+        List<String> probability = new ArrayList<>();
+        predictProbability.forEach(
+                (key, value) -> probability.add(decimalFormatter.format(value)));
+
+        Map<String, String> topicProbability = new HashMap<>();
+        topicProbability.put("Computer System Organization", probability.get(1));
+        topicProbability.put("Networks", probability.get(2));
+        topicProbability.put("Software and its Engineering", probability.get(3));
+        topicProbability.put("Theory of Computation", probability.get(4));
+        topicProbability.put("Mathematics of Computing", probability.get(5));
+        topicProbability.put("Information System", probability.get(6));
+        topicProbability.put("Security and Privacy", probability.get(7));
+        topicProbability.put("Human-centered Computing", probability.get(8));
+        topicProbability.put("Computing Methodologies", probability.get(9));
+        topicProbability.put("Applied Computing", probability.get(10));
+
+
 
         // Get Classification Report
         ClassificationReportDto classificationReportDto = ClassificationReportDto.builder()
@@ -203,6 +231,7 @@ public class PublicationServiceImpl implements PublicationService {
                 .classificationId(idGeneratorUtil.generateId(IdGeneratorEnum.CLASSIFICATION))
                 .classificationReport(classificationReportDto)
                 .predictProbability(predictProbability)
+                .topicProbability(topicProbability)
                 .predictResults(predictResults)
                 .classificationCreatedAt(LocalDateTime.now())
                 .classificationLastUpdated(LocalDateTime.now())

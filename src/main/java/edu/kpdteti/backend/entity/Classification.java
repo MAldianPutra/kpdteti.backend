@@ -22,6 +22,7 @@ public class Classification {
 
     public static final String COLLECTION_NAME = "classification";
     public static final String CLASSIFICATION_PROBABILITY = "predictProbability";
+    public static final String TOPIC_PROBABILITY = "topicProbability";
     public static final String CLASSIFICATION_RESULTS = "predictResults";
     public static final String CLASSIFICATION_REPORT = "report";
     public static final String CREATED_AT = "createdAt";
@@ -32,6 +33,9 @@ public class Classification {
 
     @Field(value = CLASSIFICATION_PROBABILITY)
     private Map<String, ?> predictProbability;
+
+    @Field(value = TOPIC_PROBABILITY)
+    private Map<String, ?> topicProbability;
 
     @Field(value = CLASSIFICATION_RESULTS)
     private List<Integer> predictResults;

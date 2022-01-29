@@ -66,13 +66,15 @@ public class PublicationController {
     }
 
     @GetMapping(ApiPath.AUTHOR_PUBLICATIONS)
-    public ResponseEntity<List<GetPublicationsByAuthorResponse>> getPublicationByAuthor(@RequestParam String authorId) {
-        return new ResponseEntity<>(publicationService.getPublicationsByAuthor(authorId), HttpStatus.OK);
+    public ResponseEntity<List<GetPublicationsByAuthorResponse>> getPublicationByAuthor(@RequestParam String authorId,
+                                                                                        @RequestParam Integer page) {
+        return new ResponseEntity<>(publicationService.getPublicationsByAuthor(authorId, page), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.TOPIC_PUBLICATIONS)
-    public ResponseEntity<List<GetPublicationsByTopicResponse>> getPublicationsByTopic(@RequestParam String topicId) {
-        return new ResponseEntity<>(publicationService.getPublicationsByTopic(topicId), HttpStatus.OK);
+    public ResponseEntity<List<GetPublicationsByTopicResponse>> getPublicationsByTopic(@RequestParam String topicId,
+                                                                                       @RequestParam Integer page) {
+        return new ResponseEntity<>(publicationService.getPublicationsByTopic(topicId, page), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.PUBLICATION)
@@ -82,13 +84,14 @@ public class PublicationController {
 
     @GetMapping(ApiPath.SEARCH_PUBLICATION)
     public ResponseEntity<List<SearchPublicationResponse>> searchPublication(@RequestParam String searchKey,
-                                                                             @RequestParam SearchTypeEnum searchType) {
-        return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType), HttpStatus.OK);
+                                                                             @RequestParam SearchTypeEnum searchType,
+                                                                             @RequestParam Integer page) {
+        return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType, page), HttpStatus.OK);
     }
 
     @GetMapping(ApiPath.ALL_PUBLICATION)
-    public ResponseEntity<List<GetAllPublicationResponse>> getAllPublications() {
-        return new ResponseEntity<>(publicationService.getAllPublications(), HttpStatus.OK);
+    public ResponseEntity<List<GetAllPublicationResponse>> getAllPublications(@RequestParam Integer page) {
+        return new ResponseEntity<>(publicationService.getAllPublications(page), HttpStatus.OK);
     }
 
     @PostMapping(ApiPath.POST_PUBLICATION)

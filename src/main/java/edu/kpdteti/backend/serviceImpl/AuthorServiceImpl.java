@@ -6,6 +6,9 @@ import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.service.AuthorService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -34,8 +37,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<GetAuthorResponse> getAllAuthors() {
-        List<Author> authors = authorRepository.findAll();
+    public List<GetAuthorResponse> getAllAuthors(Integer page) {
+        Page<Author> authors = authorRepository.findAll(PageRequest.of(page, 10, Sort.by("productName").ascending()));
         if(authors.isEmpty()) {
             throw new EntityNotFoundException("No Author in database");
         }

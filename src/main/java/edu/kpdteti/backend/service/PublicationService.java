@@ -19,15 +19,15 @@ public interface PublicationService {
 
     DownloadPublicationResponse downloadPublication(String publicationId);
 
-    List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId);
+    List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId, Integer page);
 
-    List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicOrParentId);
+    List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicOrParentId, Integer page);
 
-    List<GetAllPublicationResponse> getAllPublications();
+    List<GetAllPublicationResponse> getAllPublications(Integer page);
 
     GetPublicationResponse getPublication(String publicationId);
 
-    List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType);
+    List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType, Integer page);
 
     PostPublicationResponse postPublication(PostPublicationRequest request) throws URISyntaxException, SAXException, IOException, JAXBException;
 

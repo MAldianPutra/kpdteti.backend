@@ -16,6 +16,7 @@ public class ClassificationDto {
 
     private String classificationId;
     private Map<String, ?> predictProbability;
+    private Map<String, ?> topicProbability;
     private List<Integer> predictResults;
     private ClassificationReportDto classificationReport;
 

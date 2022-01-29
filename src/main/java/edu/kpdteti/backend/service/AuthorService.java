@@ -8,6 +8,6 @@ public interface AuthorService {
 
     GetAuthorResponse getAuthor(String authorId);
 
-    List<GetAuthorResponse> getAllAuthors();
+    List<GetAuthorResponse> getAllAuthors(Integer page);
 
 }
