@@ -11,7 +11,6 @@ import edu.kpdteti.backend.entity.dto.TopicDto;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
 import edu.kpdteti.backend.enums.SearchTypeEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
-import edu.kpdteti.backend.model.request.publication.SearchPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
 import edu.kpdteti.backend.repository.AuthorRepository;
@@ -23,10 +22,10 @@ import edu.kpdteti.backend.util.FileUploadUtil;
 import edu.kpdteti.backend.util.IdGeneratorUtil;
 import edu.kpdteti.backend.util.MLModelUtil;
 import edu.kpdteti.backend.util.TextPreprocessingUtil;
-import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -97,13 +96,15 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId, Integer page) {
-        List<Publication> publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId, PageRequest.of(page, 10, Sort.by("productName").ascending()));
+        Page<Publication> publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId, PageRequest.of(page, 10, Sort.by("productName").ascending()));
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("Publication not found with authorId " + authorId);
         }
+        Integer numberOfPage = publications.getTotalPages();
         List<GetPublicationsByAuthorResponse> responses = new ArrayList<>();
         publications.forEach(publication -> {
             GetPublicationsByAuthorResponse response = new GetPublicationsByAuthorResponse();
+            response.setNumberOfPage(numberOfPage);
             BeanUtils.copyProperties(publication, response);
             responses.add(response);
         });
@@ -112,13 +113,15 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId, Integer page) {
-        List<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId, PageRequest.of(page, 10, Sort.by("productName").ascending()));
+        Page<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId, PageRequest.of(page, 10, Sort.by("productName").ascending()));
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("Publication not found with topicId " + topicId);
         }
+        Integer numberOfPage = publications.getTotalPages();
         List<GetPublicationsByTopicResponse> responses = new ArrayList<>();
         publications.forEach(publication -> {
             GetPublicationsByTopicResponse response = new GetPublicationsByTopicResponse();
+            response.setNumberOfPage(numberOfPage);
             BeanUtils.copyProperties(publication, response);
             responses.add(response);
         });
@@ -139,29 +142,32 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType, Integer page) {
         List<Publication> publications = new ArrayList<>();
+        Page<Publication> publicationsPage = new PageImpl<>(publications);
         switch (searchType) {
             case TITLE:
-                publications = publicationRepository.findAllByPublicationTitleContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
-                if(publications.isEmpty()) {
+                publicationsPage = publicationRepository.findAllByPublicationTitleContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
+                if (publications.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with title " + searchKey);
                 }
                 break;
             case TOPIC:
-                publications = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
-                if(publications.isEmpty()) {
+                publicationsPage = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
+                if (publications.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with topic " + searchKey);
                 }
                 break;
             case AUTHOR:
-                publications = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
-                if(publications.isEmpty()) {
+                publicationsPage = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
+                if (publications.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with author " + searchKey);
                 }
                 break;
         }
+        Integer numberOfPage = publicationsPage.getTotalPages();
         List<SearchPublicationResponse> responses = new ArrayList<>();
-        publications.forEach(publication -> {
+        publicationsPage.forEach(publication -> {
             SearchPublicationResponse response = new SearchPublicationResponse();
+            response.setNumberOfPage(numberOfPage);
             BeanUtils.copyProperties(publication, response);
             responses.add(response);
         });
@@ -174,9 +180,11 @@ public class PublicationServiceImpl implements PublicationService {
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("No Publication in database");
         }
+        Integer numberOfPage = publications.getTotalPages();
         List<GetAllPublicationResponse> responses = new ArrayList<>();
         publications.forEach(publication -> {
             GetAllPublicationResponse response = new GetAllPublicationResponse();
+            response.setNumberOfPage(numberOfPage);
             BeanUtils.copyProperties(publication, response);
             responses.add(response);
         });

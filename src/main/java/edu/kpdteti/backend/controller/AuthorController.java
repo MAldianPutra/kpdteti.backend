@@ -1,8 +1,9 @@
 package edu.kpdteti.backend.controller;
 
 import edu.kpdteti.backend.ApiPath;
+import edu.kpdteti.backend.model.response.author.GetAllAuthorsNameResponse;
+import edu.kpdteti.backend.model.response.author.GetAllAuthorsResponse;
 import edu.kpdteti.backend.model.response.author.GetAuthorResponse;
-import edu.kpdteti.backend.model.response.publication.DeletePublicationResponse;
 import edu.kpdteti.backend.service.AuthorService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,13 @@ public class AuthorController {
     }
 
     @GetMapping(ApiPath.ALL_AUTHOR)
-    public ResponseEntity<List<GetAuthorResponse>> getAllAuthors(@RequestParam Integer page) {
+    public ResponseEntity<List<GetAllAuthorsResponse>> getAllAuthors(@RequestParam Integer page) {
         return new ResponseEntity<>(authorService.getAllAuthors(page), HttpStatus.OK);
+    }
+
+    @GetMapping(ApiPath.ALL_AUTHOR_NAME)
+    public ResponseEntity<List<GetAllAuthorsNameResponse>> getAllAuthorsName() {
+        return new ResponseEntity<>(authorService.getAllAuthorsName(), HttpStatus.OK);
     }
 
 }

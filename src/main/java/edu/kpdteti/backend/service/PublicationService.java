@@ -5,6 +5,7 @@ import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.SearchPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
+import org.apache.commons.math3.util.Pair;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 

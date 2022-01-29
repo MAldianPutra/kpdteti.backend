@@ -9,13 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAuthorResponse {
+public class GetAllAuthorsNameResponse {
 
     private String authorId;
     private String authorName;
-    private String authorEmail;
-    private String authorFaculty;
-    private String authorUniversity;
-    private Integer numberOfPage;
 
 }

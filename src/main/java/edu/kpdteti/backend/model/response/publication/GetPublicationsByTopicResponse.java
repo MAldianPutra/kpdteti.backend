@@ -24,6 +24,7 @@ public class GetPublicationsByTopicResponse {
     private String publicationKeyword;
     private List<String> otherAuthors;
     private List<AuthorDto> authorDto;
+    private Integer numberOfPage;
 
 
 }

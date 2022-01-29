@@ -1,6 +1,8 @@
 package edu.kpdteti.backend.serviceImpl;
 
 import edu.kpdteti.backend.entity.Author;
+import edu.kpdteti.backend.model.response.author.GetAllAuthorsNameResponse;
+import edu.kpdteti.backend.model.response.author.GetAllAuthorsResponse;
 import edu.kpdteti.backend.model.response.author.GetAuthorResponse;
 import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.service.AuthorService;
@@ -37,17 +39,35 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<GetAuthorResponse> getAllAuthors(Integer page) {
+    public List<GetAllAuthorsResponse> getAllAuthors(Integer page) {
         Page<Author> authors = authorRepository.findAll(PageRequest.of(page, 10, Sort.by("productName").ascending()));
         if(authors.isEmpty()) {
             throw new EntityNotFoundException("No Author in database");
         }
-        List<GetAuthorResponse> responses = new ArrayList<>();
+        Integer numberOfPage = authors.getTotalPages();
+        List<GetAllAuthorsResponse> responses = new ArrayList<>();
         authors.forEach(author -> {
-            GetAuthorResponse response = new GetAuthorResponse();
+            GetAllAuthorsResponse response = new GetAllAuthorsResponse();
+            response.setNumberOfPage(numberOfPage);
             BeanUtils.copyProperties(author, response);
             responses.add(response);
         });
         return responses;
     }
+
+    @Override
+    public List<GetAllAuthorsNameResponse> getAllAuthorsName() {
+        List<Author> authors = authorRepository.findAll();
+        if(authors.isEmpty()) {
+            throw new EntityNotFoundException("No Author in database");
+        }
+        List<GetAllAuthorsNameResponse> responses = new ArrayList<>();
+        authors.forEach(author -> {
+            GetAllAuthorsNameResponse response = new GetAllAuthorsNameResponse();
+            BeanUtils.copyProperties(author, response);
+            responses.add(response);
+        });
+        return responses;
+    }
+
 }

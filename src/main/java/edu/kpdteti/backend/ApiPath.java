@@ -31,6 +31,7 @@ public class ApiPath {
     // AUTHOR ENDPOINTS
     public static final String AUTHOR = API + "/authors";
     public static final String ALL_AUTHOR = AUTHOR + "/all";
+    public static final String ALL_AUTHOR_NAME = AUTHOR + "/allName";
     public static final String AUTHOR_PUBLICATIONS = AUTHOR + "/publications";
 
     // PUBLICATION ENDPOINTS

@@ -19,5 +19,6 @@ public class SearchPublicationResponse {
     private String publicationTitle;
     private List<AuthorDto> authorDto;
     private List<TopicDto> topicDto;
+    private Integer numberOfPage;
 
 }
