@@ -28,6 +28,5 @@ public class GetPublicationResponse {
     private List<String> otherAuthors;
     private List<AuthorDto> authorDto;
     private List<TopicDto> topicDto;
-    private Map<String, ?> topicProbability;
 
 }
