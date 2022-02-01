@@ -11,7 +11,6 @@ import edu.kpdteti.backend.entity.dto.TopicDto;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.repository.AuthorRepository;
-import edu.kpdteti.backend.repository.ClassificationRepository;
 import edu.kpdteti.backend.repository.TopicRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
