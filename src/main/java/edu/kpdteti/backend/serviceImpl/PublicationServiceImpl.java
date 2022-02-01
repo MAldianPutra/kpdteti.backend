@@ -1,33 +1,23 @@
 package edu.kpdteti.backend.serviceImpl;
 
-import edu.kpdteti.backend.entity.Author;
 import edu.kpdteti.backend.entity.Classification;
 import edu.kpdteti.backend.entity.Publication;
-import edu.kpdteti.backend.entity.Topic;
-import edu.kpdteti.backend.entity.dto.AuthorDto;
-import edu.kpdteti.backend.entity.dto.ClassificationDto;
-import edu.kpdteti.backend.entity.dto.ClassificationReportDto;
-import edu.kpdteti.backend.entity.dto.TopicDto;
-import edu.kpdteti.backend.enums.IdGeneratorEnum;
 import edu.kpdteti.backend.enums.SearchTypeEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
-import edu.kpdteti.backend.repository.AuthorRepository;
 import edu.kpdteti.backend.repository.ClassificationRepository;
 import edu.kpdteti.backend.repository.PublicationRepository;
-import edu.kpdteti.backend.repository.TopicRepository;
 import edu.kpdteti.backend.service.PublicationService;
 import edu.kpdteti.backend.util.FileUploadUtil;
-import edu.kpdteti.backend.util.IdGeneratorUtil;
-import edu.kpdteti.backend.util.MLModelUtil;
-import edu.kpdteti.backend.util.TextPreprocessingUtil;
+import edu.kpdteti.backend.util.PostPublicationUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
@@ -36,38 +26,26 @@ import javax.persistence.EntityNotFoundException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PublicationServiceImpl implements PublicationService {
 
     private final PublicationRepository publicationRepository;
-    private final AuthorRepository authorRepository;
-    private final TopicRepository topicRepository;
     private final ClassificationRepository classificationRepository;
     private final FileUploadUtil fileUploadUtil;
-    private final IdGeneratorUtil idGeneratorUtil;
-    private final MLModelUtil mlModelUtil;
-    private final TextPreprocessingUtil textPreprocessingUtil;
+    private final PostPublicationUtil postPublicationUtil;
 
     @Autowired
-    public PublicationServiceImpl(PublicationRepository publicationRepository, AuthorRepository authorRepository,
-                                  TopicRepository topicRepository, ClassificationRepository classificationRepository,
-                                  FileUploadUtil fileUploadUtil, IdGeneratorUtil idGeneratorUtil, MLModelUtil mlModelUtil,
-                                  TextPreprocessingUtil textPreprocessingUtil) {
+    public PublicationServiceImpl(PublicationRepository publicationRepository,
+                                  ClassificationRepository classificationRepository,
+                                  FileUploadUtil fileUploadUtil, PostPublicationUtil postPublicationUtil) {
         this.publicationRepository = publicationRepository;
-        this.authorRepository = authorRepository;
-        this.topicRepository = topicRepository;
         this.classificationRepository = classificationRepository;
         this.fileUploadUtil = fileUploadUtil;
-        this.idGeneratorUtil = idGeneratorUtil;
-        this.mlModelUtil = mlModelUtil;
-        this.textPreprocessingUtil = textPreprocessingUtil;
+        this.postPublicationUtil = postPublicationUtil;
     }
 
     @Override
@@ -193,105 +171,10 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public PostPublicationResponse postPublication(PostPublicationRequest request) throws URISyntaxException, SAXException, IOException, JAXBException {
-        // Text Preprocessing
-        String concatText = textPreprocessingUtil.concatAndLowercaseText(request.getPublicationTitle(),
-                request.getPublicationAbstract(), request.getPublicationKeyword());
-        String symbolRemovedText = textPreprocessingUtil.symbolRemover(concatText);
-        String lemmatizedText = textPreprocessingUtil.lemmatizer(symbolRemovedText);
-
-        // ML Model to get Classification
-        Map<String, ?> predictProbability = mlModelUtil.predictText(lemmatizedText);
-
-        // Get Topic with Highest Probability
-        Integer topicWithHighestProbability = (Integer) predictProbability.get("Label");
-        List<Integer> predictResults = new ArrayList<>();
-        predictResults.add(topicWithHighestProbability);
-
-        // Get TopicProbability
-        DecimalFormat decimalFormatter = new DecimalFormat("#.####");
-        List<String> probability = new ArrayList<>();
-        predictProbability.forEach(
-                (key, value) -> probability.add(decimalFormatter.format(value)));
-
-        Map<String, String> topicProbability = new HashMap<>();
-        topicProbability.put("Computer System Organization", probability.get(1));
-        topicProbability.put("Networks", probability.get(2));
-        topicProbability.put("Software and its Engineering", probability.get(3));
-        topicProbability.put("Theory of Computation", probability.get(4));
-        topicProbability.put("Mathematics of Computing", probability.get(5));
-        topicProbability.put("Information System", probability.get(6));
-        topicProbability.put("Security and Privacy", probability.get(7));
-        topicProbability.put("Human-centered Computing", probability.get(8));
-        topicProbability.put("Computing Methodologies", probability.get(9));
-        topicProbability.put("Applied Computing", probability.get(10));
-
-        // Get Classification Report
-        ClassificationReportDto classificationReportDto = ClassificationReportDto.builder()
-                .concatText(concatText)
-                .symbolRemovedText(symbolRemovedText)
-                .lemmatizedText(lemmatizedText)
-                .build();
-
-        // Build
-        Classification classification = Classification.builder()
-                .classificationId(idGeneratorUtil.generateId(IdGeneratorEnum.CLASSIFICATION))
-                .classificationReport(classificationReportDto)
-                .predictProbability(predictProbability)
-                .topicProbability(topicProbability)
-                .predictResults(predictResults)
-                .classificationCreatedAt(LocalDateTime.now())
-                .classificationLastUpdated(LocalDateTime.now())
-                .build();
-
-        // Get Author Ids and Dtos
-        List<AuthorDto> authorDtos = new ArrayList<>();
-        request.getAuthorIds().forEach(id -> {
-            Author author = authorRepository.findByAuthorId(id);
-            if (author == null) {
-                throw new EntityNotFoundException("Author not found with id " + id);
-            }
-            AuthorDto authorDto = new AuthorDto();
-            BeanUtils.copyProperties(author, authorDto);
-            authorDtos.add(authorDto);
-        });
-
-        // Get Topic Ids and Dtos
-        List<TopicDto> topicDtos = new ArrayList<>();
-        predictResults.forEach(integer -> {
-            Topic topic = topicRepository.findByTopicLabel(integer);
-            if (topic == null) {
-                throw new EntityNotFoundException("Topic not found with label " + integer);
-            }
-            TopicDto topicDto = new TopicDto();
-            BeanUtils.copyProperties(topic, topicDto);
-            topicDtos.add(topicDto);
-        });
-
-        // Get Classification Dto
-        ClassificationDto classificationDto = new ClassificationDto();
-        BeanUtils.copyProperties(classification, classificationDto);
-
-        // Upload Publication
-        String publicationPath = " ";
-
-        // Build Publication
-        Publication publication = Publication.builder()
-                .publicationId(idGeneratorUtil.generateId(IdGeneratorEnum.PUBLICATION))
-                .publicationPath(publicationPath)
-                .classificationDto(classificationDto)
-                .authorDto(authorDtos)
-                .topicDto(topicDtos)
-                .publicationCreatedAt(LocalDateTime.now())
-                .publicationLastUpdated(LocalDateTime.now())
-                .build();
-        BeanUtils.copyProperties(request, publication);
-
-        // Save the Publication and Classification
-        Publication savedPublication = publicationRepository.save(publication);
-        classificationRepository.save(classification);
+        Pair<Publication, Classification> postPublicationUtilResponse = postPublicationUtil.postPublication(request);
+        Publication savedPublication = publicationRepository.save(postPublicationUtilResponse.getFirst());
+        classificationRepository.save(postPublicationUtilResponse.getSecond());
         PostPublicationResponse response = new PostPublicationResponse();
-
-        // Build and Return Response
         BeanUtils.copyProperties(savedPublication, response);
         return response;
     }

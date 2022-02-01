@@ -1,0 +1,26 @@
+[
+  {
+    "topicParentId": "par-83009c72-08c1-4c0e-8bf0-0738cbc0fa98",
+    "topicParentName": "Hardware"
+  },
+  {
+    "topicParentId": "par-b23e4732-bbe7-4a0a-87c5-e4b515690d8f",
+    "topicParentName": "Networks"
+  },
+  {
+    "topicParentId": "par-0f16de03-b766-41f0-84ee-8af38c783a89",
+    "topicParentName": "Networks"
+  },
+  {
+    "topicParentId": "par-26558b2b-62f1-4ca7-9c4b-c7c288fdebb5",
+    "topicParentName": "Theory of Computation"
+  },
+  {
+    "topicParentId": "par-041df439-cf21-4698-a3cc-fd79bfca85a3",
+    "topicParentName": "Information Systems"
+  },
+  {
+    "topicParentId": "par-d9d963a9-4f4d-4627-a675-733d5843d6df",
+    "topicParentName": "Computing Methodologies"
+  }
+]

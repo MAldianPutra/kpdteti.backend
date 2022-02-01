@@ -1,19 +1,20 @@
 package edu.kpdteti.backend.serviceImpl;
 
-import edu.kpdteti.backend.entity.Author;
-import edu.kpdteti.backend.entity.Topic;
+import edu.kpdteti.backend.entity.*;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
+import edu.kpdteti.backend.enums.UserRoleEnum;
 import edu.kpdteti.backend.model.request.admin.PostAuthorRequest;
 import edu.kpdteti.backend.model.request.admin.PostTopicRequest;
 import edu.kpdteti.backend.model.response.admin.*;
-import edu.kpdteti.backend.repository.AuthorRepository;
-import edu.kpdteti.backend.repository.TopicRepository;
+import edu.kpdteti.backend.repository.*;
 import edu.kpdteti.backend.service.AdminService;
 import edu.kpdteti.backend.util.IdGeneratorUtil;
-import edu.kpdteti.backend.util.PopulateAuthorUtil;
-import edu.kpdteti.backend.util.PopulateTopicUtil;
+import edu.kpdteti.backend.util.populateUtil.PopulateAuthorUtil;
+import edu.kpdteti.backend.util.populateUtil.PopulatePublicationUtil;
+import edu.kpdteti.backend.util.populateUtil.PopulateTopicUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -25,17 +26,32 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
 
     private final AuthorRepository authorRepository;
+    private final UserRepository userRepository;
     private final TopicRepository topicRepository;
+    private final PublicationRepository publicationRepository;
+    private final ClassificationRepository classificationRepository;
     private final IdGeneratorUtil idGeneratorUtil;
+    private final PopulatePublicationUtil populatePublicationUtil;
     private final PopulateAuthorUtil populateAuthorUtil;
     private final PopulateTopicUtil populateTopicUtil;
 
     @Autowired
-    public AdminServiceImpl(AuthorRepository authorRepository, TopicRepository topicRepository, IdGeneratorUtil idGeneratorUtil,
-                            PopulateAuthorUtil populateAuthorUtil, PopulateTopicUtil populateTopicUtil) {
+    public AdminServiceImpl(AuthorRepository authorRepository,
+                            UserRepository userRepository,
+                            TopicRepository topicRepository,
+                            PublicationRepository publicationRepository,
+                            ClassificationRepository classificationRepository,
+                            IdGeneratorUtil idGeneratorUtil,
+                            PopulatePublicationUtil populatePublicationUtil,
+                            PopulateAuthorUtil populateAuthorUtil,
+                            PopulateTopicUtil populateTopicUtil) {
         this.authorRepository = authorRepository;
+        this.userRepository = userRepository;
         this.topicRepository = topicRepository;
+        this.publicationRepository = publicationRepository;
+        this.classificationRepository = classificationRepository;
         this.idGeneratorUtil = idGeneratorUtil;
+        this.populatePublicationUtil = populatePublicationUtil;
         this.populateAuthorUtil = populateAuthorUtil;
         this.populateTopicUtil = populateTopicUtil;
     }
@@ -123,5 +139,19 @@ public class AdminServiceImpl implements AdminService {
             responses.add(response);
         });
         return responses;
+    }
+
+    @Override
+    public PopulatePublicationResponse populatePublication() {
+        List<Author> authors = authorRepository.findAll();
+        List<User> users = userRepository.findAllByUserRoleEnum(UserRoleEnum.ROLE_ADMIN);
+        List<Pair<Publication, Classification>> requests = populatePublicationUtil.populatePublication(authors, users);
+        requests.forEach(request -> {
+            publicationRepository.save(request.getFirst());
+            classificationRepository.save(request.getSecond());
+        });
+        return PopulatePublicationResponse.builder()
+                .message("Success")
+                .build();
     }
 }

@@ -1,7 +1,8 @@
-package edu.kpdteti.backend.util;
+package edu.kpdteti.backend.util.populateUtil;
 
 import edu.kpdteti.backend.entity.Author;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
+import edu.kpdteti.backend.util.IdGeneratorUtil;
 import org.apache.commons.math3.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

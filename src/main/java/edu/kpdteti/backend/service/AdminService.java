@@ -19,4 +19,6 @@ public interface AdminService {
 
     List<PopulateTopicResponse> populateTopic();
 
+    PopulatePublicationResponse populatePublication();
+
 }
