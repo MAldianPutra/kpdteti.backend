@@ -66,6 +66,9 @@ public class PublicationServiceImpl implements PublicationService {
         if (publication == null) {
             throw new EntityNotFoundException("Publication not found with id " + publicationId);
         }
+        if (publication.getPublicationPath() == null) {
+            throw new EntityNotFoundException("File not found with id " + publicationId);
+        }
         return DownloadPublicationResponse.builder()
                 .publicationPath(publication.getPublicationPath())
                 .publicationTitle(publication.getPublicationTitle() + ".pdf")
@@ -123,20 +126,20 @@ public class PublicationServiceImpl implements PublicationService {
         Page<Publication> publicationsPage = new PageImpl<>(publications);
         switch (searchType) {
             case TITLE:
-                publicationsPage = publicationRepository.findAllByPublicationTitleContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
-                if (publications.isEmpty()) {
+                publicationsPage = publicationRepository.findAllByPublicationTitleContaining(searchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+                if (publicationsPage.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with title " + searchKey);
                 }
                 break;
             case TOPIC:
-                publicationsPage = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
-                if (publications.isEmpty()) {
+                publicationsPage = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+                if (publicationsPage.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with topic " + searchKey);
                 }
                 break;
             case AUTHOR:
-                publicationsPage = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("productName").ascending()));
-                if (publications.isEmpty()) {
+                publicationsPage = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+                if (publicationsPage.isEmpty()) {
                     throw new EntityNotFoundException("Publication not found with author " + searchKey);
                 }
                 break;
