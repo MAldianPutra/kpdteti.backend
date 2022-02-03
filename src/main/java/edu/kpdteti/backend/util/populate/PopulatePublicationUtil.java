@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.util.populateUtil;
+package edu.kpdteti.backend.util.populate;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;

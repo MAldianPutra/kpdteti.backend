@@ -35,8 +35,12 @@ public class AuthorController {
     }
 
     @GetMapping(ApiPath.ALL_AUTHOR)
-    public ResponseEntity<List<GetAllAuthorsResponse>> getAllAuthors(@RequestParam Integer page) {
-        return new ResponseEntity<>(authorService.getAllAuthors(page), HttpStatus.OK);
+    public ResponseEntity<List<GetAllAuthorsResponse>> getAllAuthors(@RequestParam(required = false) Integer page) {
+        if(page != null) {
+            return new ResponseEntity<>(authorService.getAllAuthors(page, true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(authorService.getAllAuthors(page, false), HttpStatus.OK);
+        }
     }
 
     @GetMapping(ApiPath.ALL_AUTHOR_NAME)

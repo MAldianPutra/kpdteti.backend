@@ -9,6 +9,7 @@ import edu.kpdteti.backend.service.AuthorService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public GetAuthorResponse getAuthor(String authorId) {
         Author author = authorRepository.findByAuthorId(authorId);
-        if(author == null) {
+        if (author == null) {
             throw new EntityNotFoundException("Author not found with id " + authorId);
         }
         GetAuthorResponse response = new GetAuthorResponse();
@@ -39,12 +40,24 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<GetAllAuthorsResponse> getAllAuthors(Integer page) {
-        Page<Author> authors = authorRepository.findAll(PageRequest.of(page, 10, Sort.by("productName").ascending()));
-        if(authors.isEmpty()) {
-            throw new EntityNotFoundException("No Author in database");
+    public List<GetAllAuthorsResponse> getAllAuthors(Integer page, Boolean usePage) {
+        List<Author> authors = new ArrayList<>();
+        Page<Author> authorsPage = new PageImpl<>(authors);
+        int numberOfPage;
+        if (usePage.equals(Boolean.TRUE)) {
+            authorsPage = authorRepository.findAll(PageRequest.of(page, 10, Sort.by("authorName").ascending()));
+            if (authorsPage.isEmpty()) {
+                throw new EntityNotFoundException("Author not found");
+            }
+            numberOfPage = authorsPage.getTotalPages();
+            authors = authorsPage.toList();
+        } else {
+            authors = authorRepository.findAll(Sort.by("authorName").ascending());
+            if (authors.isEmpty()) {
+                throw new EntityNotFoundException("Author not found");
+            }
+            numberOfPage = 0;
         }
-        Integer numberOfPage = authors.getTotalPages();
         List<GetAllAuthorsResponse> responses = new ArrayList<>();
         authors.forEach(author -> {
             GetAllAuthorsResponse response = new GetAllAuthorsResponse();
@@ -58,7 +71,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<GetAllAuthorsNameResponse> getAllAuthorsName() {
         List<Author> authors = authorRepository.findAll();
-        if(authors.isEmpty()) {
+        if (authors.isEmpty()) {
             throw new EntityNotFoundException("No Author in database");
         }
         List<GetAllAuthorsNameResponse> responses = new ArrayList<>();

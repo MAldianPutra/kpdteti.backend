@@ -3,12 +3,10 @@ package edu.kpdteti.backend.controller;
 import edu.kpdteti.backend.ApiPath;
 import edu.kpdteti.backend.enums.SearchTypeEnum;
 import edu.kpdteti.backend.model.request.publication.PostPublicationRequest;
-import edu.kpdteti.backend.model.request.publication.SearchPublicationRequest;
 import edu.kpdteti.backend.model.request.publication.UpdatePublicationRequest;
 import edu.kpdteti.backend.model.response.publication.*;
 import edu.kpdteti.backend.service.PublicationService;
 import io.swagger.annotations.Api;
-import org.apache.commons.math3.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -68,14 +66,24 @@ public class PublicationController {
 
     @GetMapping(ApiPath.AUTHOR_PUBLICATIONS)
     public ResponseEntity<List<GetPublicationsByAuthorResponse>> getPublicationByAuthor(@RequestParam String authorId,
-                                                                                        @RequestParam Integer page) {
-        return new ResponseEntity<>(publicationService.getPublicationsByAuthor(authorId, page), HttpStatus.OK);
+                                                                                        @RequestParam(required = false) Integer page) {
+        if (page != null) {
+            return new ResponseEntity<>(publicationService.getPublicationsByAuthor(authorId, page, true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(publicationService.getPublicationsByAuthor(authorId, page, false), HttpStatus.OK);
+        }
+
     }
 
     @GetMapping(ApiPath.TOPIC_PUBLICATIONS)
     public ResponseEntity<List<GetPublicationsByTopicResponse>> getPublicationsByTopic(@RequestParam String topicId,
-                                                                                       @RequestParam Integer page) {
-        return new ResponseEntity<>(publicationService.getPublicationsByTopic(topicId, page), HttpStatus.OK);
+                                                                                       @RequestParam(required = false) Integer page) {
+        if (page != null) {
+            return new ResponseEntity<>(publicationService.getPublicationsByTopic(topicId, page, true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(publicationService.getPublicationsByTopic(topicId, page, false), HttpStatus.OK);
+        }
+
     }
 
     @GetMapping(ApiPath.PUBLICATION)
@@ -86,13 +94,23 @@ public class PublicationController {
     @GetMapping(ApiPath.SEARCH_PUBLICATION)
     public ResponseEntity<List<SearchPublicationResponse>> searchPublication(@RequestParam String searchKey,
                                                                              @RequestParam SearchTypeEnum searchType,
-                                                                             @RequestParam Integer page) {
-        return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType, page), HttpStatus.OK);
+                                                                             @RequestParam(required = false) Integer page) {
+        if (page != null) {
+            return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType, page, true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType, page, false), HttpStatus.OK);
+        }
+
     }
 
     @GetMapping(ApiPath.ALL_PUBLICATION)
-    public ResponseEntity<List<GetAllPublicationResponse>> getAllPublications(@RequestParam Integer page) {
-        return new ResponseEntity<>(publicationService.getAllPublications(page), HttpStatus.OK);
+    public ResponseEntity<List<GetAllPublicationResponse>> getAllPublications(@RequestParam(required = false) Integer page) {
+        if (page != null) {
+            return new ResponseEntity<>(publicationService.getAllPublications(page, true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(publicationService.getAllPublications(page, false), HttpStatus.OK);
+        }
+
     }
 
     @PostMapping(ApiPath.POST_PUBLICATION)
@@ -101,8 +119,8 @@ public class PublicationController {
     }
 
     @PostMapping(value = ApiPath.PUBLICATION_UPLOAD, consumes = "multipart/form-data")
-    public ResponseEntity<UploadPublicationResponse> uploadPublication(@RequestParam ("id") String publicationId,
-                                                                       @RequestParam ("file") MultipartFile file) throws IOException, URISyntaxException {
+    public ResponseEntity<UploadPublicationResponse> uploadPublication(@RequestParam("id") String publicationId,
+                                                                       @RequestParam("file") MultipartFile file) throws IOException, URISyntaxException {
         return new ResponseEntity<>(publicationService.uploadPublication(publicationId, file), HttpStatus.OK);
     }
 

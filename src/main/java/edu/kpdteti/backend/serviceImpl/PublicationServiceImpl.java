@@ -11,6 +11,7 @@ import edu.kpdteti.backend.repository.PublicationRepository;
 import edu.kpdteti.backend.service.PublicationService;
 import edu.kpdteti.backend.util.FileUploadUtil;
 import edu.kpdteti.backend.util.PostPublicationUtil;
+import edu.kpdteti.backend.util.SearchKeyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,15 +38,19 @@ public class PublicationServiceImpl implements PublicationService {
     private final ClassificationRepository classificationRepository;
     private final FileUploadUtil fileUploadUtil;
     private final PostPublicationUtil postPublicationUtil;
+    private final SearchKeyUtil searchKeyUtil;
 
     @Autowired
     public PublicationServiceImpl(PublicationRepository publicationRepository,
                                   ClassificationRepository classificationRepository,
-                                  FileUploadUtil fileUploadUtil, PostPublicationUtil postPublicationUtil) {
+                                  FileUploadUtil fileUploadUtil,
+                                  PostPublicationUtil postPublicationUtil,
+                                  SearchKeyUtil searchKeyUtil) {
         this.publicationRepository = publicationRepository;
         this.classificationRepository = classificationRepository;
         this.fileUploadUtil = fileUploadUtil;
         this.postPublicationUtil = postPublicationUtil;
+        this.searchKeyUtil = searchKeyUtil;
     }
 
     @Override
@@ -76,12 +81,24 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId, Integer page) {
-        Page<Publication> publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
-        if (publications.isEmpty()) {
-            throw new EntityNotFoundException("Publication not found with authorId " + authorId);
+    public List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId, Integer page, Boolean usePage) {
+        List<Publication> publications = new ArrayList<>();
+        Page<Publication> publicationsPage = new PageImpl<>(publications);
+        int numberOfPage;
+        if (usePage.equals(Boolean.TRUE)) {
+            publicationsPage = publicationRepository.findAllByAuthorDto_AuthorId(authorId, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+            if (publicationsPage.isEmpty()) {
+                throw new EntityNotFoundException("Publication not found with authorId " + authorId);
+            }
+            numberOfPage = publicationsPage.getTotalPages();
+            publications = publicationsPage.toList();
+        } else {
+            publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId, Sort.by("publicationTitle").ascending());
+            if (publications.isEmpty()) {
+                throw new EntityNotFoundException("Publication not found with authorId " + authorId);
+            }
+            numberOfPage = 0;
         }
-        Integer numberOfPage = publications.getTotalPages();
         List<GetPublicationsByAuthorResponse> responses = new ArrayList<>();
         publications.forEach(publication -> {
             GetPublicationsByAuthorResponse response = new GetPublicationsByAuthorResponse();
@@ -93,12 +110,24 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId, Integer page) {
-        Page<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
-        if (publications.isEmpty()) {
-            throw new EntityNotFoundException("Publication not found with topicId " + topicId);
+    public List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId, Integer page, Boolean usePage) {
+        List<Publication> publications = new ArrayList<>();
+        Page<Publication> publicationsPage = new PageImpl<>(publications);
+        int numberOfPage;
+        if (usePage.equals(Boolean.TRUE)) {
+            publicationsPage = publicationRepository.findAllByTopicDto_TopicId(topicId, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+            if (publicationsPage.isEmpty()) {
+                throw new EntityNotFoundException("Publication not found with topicId " + topicId);
+            }
+            numberOfPage = publicationsPage.getTotalPages();
+            publications = publicationsPage.toList();
+        } else {
+            publications = publicationRepository.findAllByTopicDto_TopicId(topicId, Sort.by("publicationTitle").ascending());
+            if (publications.isEmpty()) {
+                throw new EntityNotFoundException("Publication not found with topicId " + topicId);
+            }
+            numberOfPage = 0;
         }
-        Integer numberOfPage = publications.getTotalPages();
         List<GetPublicationsByTopicResponse> responses = new ArrayList<>();
         publications.forEach(publication -> {
             GetPublicationsByTopicResponse response = new GetPublicationsByTopicResponse();
@@ -121,32 +150,59 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType, Integer page) {
+    public List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType, Integer page, Boolean usePage) {
         List<Publication> publications = new ArrayList<>();
         Page<Publication> publicationsPage = new PageImpl<>(publications);
-        switch (searchType) {
-            case TITLE:
-                publicationsPage = publicationRepository.findAllByPublicationTitleContaining(searchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
-                if (publicationsPage.isEmpty()) {
-                    throw new EntityNotFoundException("Publication not found with title " + searchKey);
-                }
-                break;
-            case TOPIC:
-                publicationsPage = publicationRepository.findAllByTopicDto_TopicNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
-                if (publicationsPage.isEmpty()) {
-                    throw new EntityNotFoundException("Publication not found with topic " + searchKey);
-                }
-                break;
-            case AUTHOR:
-                publicationsPage = publicationRepository.findAllByAuthorDto_AuthorNameContaining(searchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
-                if (publicationsPage.isEmpty()) {
-                    throw new EntityNotFoundException("Publication not found with author " + searchKey);
-                }
-                break;
+        String capitalizedSearchKey = searchKeyUtil.capitalizeSearchKey(searchKey);
+        int numberOfPage;
+        if (usePage.equals(Boolean.TRUE)) {
+            switch (searchType) {
+                case TITLE:
+                    publicationsPage = publicationRepository.findAllByPublicationTitleContaining(capitalizedSearchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+                    if (publicationsPage.isEmpty()) {
+                        throw new EntityNotFoundException("Publication not found with title " + searchKey);
+                    }
+                    break;
+                case TOPIC:
+                    publicationsPage = publicationRepository.findAllByTopicDto_TopicNameContaining(capitalizedSearchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+                    if (publicationsPage.isEmpty()) {
+                        throw new EntityNotFoundException("Publication not found with topic " + searchKey);
+                    }
+                    break;
+                case AUTHOR:
+                    publicationsPage = publicationRepository.findAllByAuthorDto_AuthorNameContaining(capitalizedSearchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+                    if (publicationsPage.isEmpty()) {
+                        throw new EntityNotFoundException("Publication not found with author " + searchKey);
+                    }
+                    break;
+            }
+            numberOfPage = publicationsPage.getTotalPages();
+            publications = publicationsPage.toList();
+        } else {
+            switch (searchType) {
+                case TITLE:
+                    publications = publicationRepository.findAllByPublicationTitleContaining(capitalizedSearchKey, Sort.by("publicationTitle").ascending());
+                    if (publications.isEmpty()) {
+                        throw new EntityNotFoundException("Publication not found with title " + searchKey);
+                    }
+                    break;
+                case TOPIC:
+                    publications = publicationRepository.findAllByTopicDto_TopicNameContaining(capitalizedSearchKey, Sort.by("publicationTitle").ascending());
+                    if (publications.isEmpty()) {
+                        throw new EntityNotFoundException("Publication not found with topic " + searchKey);
+                    }
+                    break;
+                case AUTHOR:
+                    publications = publicationRepository.findAllByAuthorDto_AuthorNameContaining(capitalizedSearchKey, Sort.by("publicationTitle").ascending());
+                    if (publications.isEmpty()) {
+                        throw new EntityNotFoundException("Publication not found with author " + searchKey);
+                    }
+                    break;
+            }
+            numberOfPage = 0;
         }
-        Integer numberOfPage = publicationsPage.getTotalPages();
         List<SearchPublicationResponse> responses = new ArrayList<>();
-        publicationsPage.forEach(publication -> {
+        publications.forEach(publication -> {
             SearchPublicationResponse response = new SearchPublicationResponse();
             response.setNumberOfPage(numberOfPage);
             BeanUtils.copyProperties(publication, response);
@@ -156,12 +212,24 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<GetAllPublicationResponse> getAllPublications(Integer page) {
-        Page<Publication> publications = publicationRepository.findAll(PageRequest.of(page, 20, Sort.by("publicationTitle").ascending()));
-        if (publications.isEmpty()) {
-            throw new EntityNotFoundException("No Publication in database");
+    public List<GetAllPublicationResponse> getAllPublications(Integer page, Boolean usePage) {
+        List<Publication> publications = new ArrayList<>();
+        Page<Publication> publicationsPage = new PageImpl<>(publications);
+        int numberOfPage;
+        if (usePage.equals(Boolean.TRUE)) {
+            publicationsPage = publicationRepository.findAll(PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+            if (publicationsPage.isEmpty()) {
+                throw new EntityNotFoundException("Publication not found");
+            }
+            numberOfPage = publicationsPage.getTotalPages();
+            publications = publicationsPage.toList();
+        } else {
+            publications = publicationRepository.findAll(Sort.by("publicationTitle").ascending());
+            if (publications.isEmpty()) {
+                throw new EntityNotFoundException("Publication not found");
+            }
+            numberOfPage = 0;
         }
-        Integer numberOfPage = publications.getTotalPages();
         List<GetAllPublicationResponse> responses = new ArrayList<>();
         publications.forEach(publication -> {
             GetAllPublicationResponse response = new GetAllPublicationResponse();

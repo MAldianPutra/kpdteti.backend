@@ -1,4 +1,4 @@
-package edu.kpdteti.backend.util.populateUtil;
+package edu.kpdteti.backend.util.populate;
 
 import edu.kpdteti.backend.entity.Topic;
 import edu.kpdteti.backend.enums.IdGeneratorEnum;
