@@ -77,7 +77,7 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public List<GetPublicationsByAuthorResponse> getPublicationsByAuthor(String authorId, Integer page) {
-        Page<Publication> publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId, PageRequest.of(page, 10, Sort.by("productName").ascending()));
+        Page<Publication> publications = publicationRepository.findAllByAuthorDto_AuthorId(authorId, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("Publication not found with authorId " + authorId);
         }
@@ -94,7 +94,7 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public List<GetPublicationsByTopicResponse> getPublicationsByTopic(String topicId, Integer page) {
-        Page<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId, PageRequest.of(page, 10, Sort.by("productName").ascending()));
+        Page<Publication> publications = publicationRepository.findAllByTopicDto_TopicId(topicId, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("Publication not found with topicId " + topicId);
         }
@@ -157,7 +157,7 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public List<GetAllPublicationResponse> getAllPublications(Integer page) {
-        Page<Publication> publications = publicationRepository.findAll(PageRequest.of(page, 20, Sort.by("productName").ascending()));
+        Page<Publication> publications = publicationRepository.findAll(PageRequest.of(page, 20, Sort.by("publicationTitle").ascending()));
         if (publications.isEmpty()) {
             throw new EntityNotFoundException("No Publication in database");
         }
