@@ -93,12 +93,11 @@ public class PublicationController {
 
     @GetMapping(ApiPath.SEARCH_PUBLICATION)
     public ResponseEntity<List<SearchPublicationResponse>> searchPublication(@RequestParam String searchKey,
-                                                                             @RequestParam SearchTypeEnum searchType,
                                                                              @RequestParam(required = false) Integer page) {
         if (page != null) {
-            return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType, page, true), HttpStatus.OK);
+            return new ResponseEntity<>(publicationService.searchPublication(searchKey, page, true), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(publicationService.searchPublication(searchKey, searchType, page, false), HttpStatus.OK);
+            return new ResponseEntity<>(publicationService.searchPublication(searchKey, page, false), HttpStatus.OK);
         }
 
     }

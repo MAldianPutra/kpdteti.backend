@@ -28,7 +28,7 @@ public interface PublicationService {
 
     GetPublicationResponse getPublication(String publicationId);
 
-    List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType, Integer page, Boolean usePage);
+    List<SearchPublicationResponse> searchPublication(String searchKey, Integer page, Boolean usePage);
 
     PostPublicationResponse postPublication(PostPublicationRequest request) throws URISyntaxException, SAXException, IOException, JAXBException;
 

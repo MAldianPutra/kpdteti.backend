@@ -150,54 +150,28 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<SearchPublicationResponse> searchPublication(String searchKey, SearchTypeEnum searchType, Integer page, Boolean usePage) {
+    public List<SearchPublicationResponse> searchPublication(String searchKey, Integer page, Boolean usePage) {
         List<Publication> publications = new ArrayList<>();
         Page<Publication> publicationsPage = new PageImpl<>(publications);
         String capitalizedSearchKey = searchKeyUtil.capitalizeSearchKey(searchKey);
         int numberOfPage;
         if (usePage.equals(Boolean.TRUE)) {
-            switch (searchType) {
-                case TITLE:
-                    publicationsPage = publicationRepository.findAllByPublicationTitleContaining(capitalizedSearchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
-                    if (publicationsPage.isEmpty()) {
-                        throw new EntityNotFoundException("Publication not found with title " + searchKey);
-                    }
-                    break;
-                case TOPIC:
-                    publicationsPage = publicationRepository.findAllByTopicDto_TopicNameContaining(capitalizedSearchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
-                    if (publicationsPage.isEmpty()) {
-                        throw new EntityNotFoundException("Publication not found with topic " + searchKey);
-                    }
-                    break;
-                case AUTHOR:
-                    publicationsPage = publicationRepository.findAllByAuthorDto_AuthorNameContaining(capitalizedSearchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
-                    if (publicationsPage.isEmpty()) {
-                        throw new EntityNotFoundException("Publication not found with author " + searchKey);
-                    }
-                    break;
+            publicationsPage = publicationRepository.findAllByPublicationTitleContaining(capitalizedSearchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+            if (publicationsPage.isEmpty()) {
+                publicationsPage = publicationRepository.findAllByAuthorDto_AuthorNameContaining(capitalizedSearchKey, PageRequest.of(page, 10, Sort.by("publicationTitle").ascending()));
+                if (publicationsPage.isEmpty()) {
+                    throw new EntityNotFoundException("Publication not found with key " + searchKey);
+                }
             }
             numberOfPage = publicationsPage.getTotalPages();
             publications = publicationsPage.toList();
         } else {
-            switch (searchType) {
-                case TITLE:
-                    publications = publicationRepository.findAllByPublicationTitleContaining(capitalizedSearchKey, Sort.by("publicationTitle").ascending());
-                    if (publications.isEmpty()) {
-                        throw new EntityNotFoundException("Publication not found with title " + searchKey);
-                    }
-                    break;
-                case TOPIC:
-                    publications = publicationRepository.findAllByTopicDto_TopicNameContaining(capitalizedSearchKey, Sort.by("publicationTitle").ascending());
-                    if (publications.isEmpty()) {
-                        throw new EntityNotFoundException("Publication not found with topic " + searchKey);
-                    }
-                    break;
-                case AUTHOR:
-                    publications = publicationRepository.findAllByAuthorDto_AuthorNameContaining(capitalizedSearchKey, Sort.by("publicationTitle").ascending());
-                    if (publications.isEmpty()) {
-                        throw new EntityNotFoundException("Publication not found with author " + searchKey);
-                    }
-                    break;
+            publications = publicationRepository.findAllByPublicationTitleContaining(capitalizedSearchKey, Sort.by("publicationTitle").ascending());
+            if (publications.isEmpty()) {
+                publications = publicationRepository.findAllByAuthorDto_AuthorNameContaining(capitalizedSearchKey, Sort.by("publicationTitle").ascending());
+                if (publications.isEmpty()) {
+                    throw new EntityNotFoundException("Publication not found with key " + searchKey);
+                }
             }
             numberOfPage = 0;
         }
