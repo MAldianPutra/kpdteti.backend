@@ -71,7 +71,7 @@ public class PublicationServiceImpl implements PublicationService {
         if (publication == null) {
             throw new EntityNotFoundException("Publication not found with id " + publicationId);
         }
-        if (publication.getPublicationPath() == null) {
+        if (publication.getPublicationPath().isBlank()) {
             throw new EntityNotFoundException("File not found with id " + publicationId);
         }
         return DownloadPublicationResponse.builder()
@@ -146,6 +146,11 @@ public class PublicationServiceImpl implements PublicationService {
         }
         GetPublicationResponse response = new GetPublicationResponse();
         BeanUtils.copyProperties(publication, response);
+        if (response.getPublicationPath().isBlank()) {
+            response.setIsFileAvailable(Boolean.FALSE);
+        } else {
+            response.setIsFileAvailable(Boolean.TRUE);
+        }
         return response;
     }
 

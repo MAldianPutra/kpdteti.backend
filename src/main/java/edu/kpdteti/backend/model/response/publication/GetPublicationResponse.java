@@ -24,6 +24,7 @@ public class GetPublicationResponse {
     private String publicationAbstract;
     private String publicationKeyword;
     private String publicationPath;
+    private Boolean isFileAvailable;
     private ClassificationDto classificationDto;
     private List<String> otherAuthors;
     private List<AuthorDto> authorDto;
