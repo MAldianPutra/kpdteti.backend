@@ -39,7 +39,7 @@ public class PublicationController {
         this.publicationService = publicationService;
     }
 
-    @DeleteMapping(ApiPath.PUBLICATION)
+    @DeleteMapping(ApiPath.ADMIN_PUBLICATION)
     public ResponseEntity<DeletePublicationResponse> deletePublication(@RequestParam String publicationId) throws ClassNotFoundException {
         return new ResponseEntity<>(publicationService.deletePublication(publicationId), HttpStatus.OK);
     }
@@ -112,18 +112,18 @@ public class PublicationController {
 
     }
 
-    @PostMapping(ApiPath.POST_PUBLICATION)
+    @PostMapping(ApiPath.ADMIN_POST_PUBLICATION)
     public ResponseEntity<PostPublicationResponse> postPublication(@Valid @RequestBody PostPublicationRequest request) throws SAXException, JAXBException, IOException, URISyntaxException {
         return new ResponseEntity<>(publicationService.postPublication(request), HttpStatus.OK);
     }
 
-    @PostMapping(value = ApiPath.PUBLICATION_UPLOAD, consumes = "multipart/form-data")
+    @PostMapping(value = ApiPath.ADMIN_UPLOAD_PUBLICATION, consumes = "multipart/form-data")
     public ResponseEntity<UploadPublicationResponse> uploadPublication(@RequestParam("id") String publicationId,
                                                                        @RequestParam("file") MultipartFile file) throws IOException, URISyntaxException {
         return new ResponseEntity<>(publicationService.uploadPublication(publicationId, file), HttpStatus.OK);
     }
 
-    @PutMapping(ApiPath.PUBLICATION)
+    @PutMapping(ApiPath.ADMIN_PUBLICATION)
     public ResponseEntity<UpdatePublicationResponse> updatePublication(@Valid @RequestBody UpdatePublicationRequest request) {
         return new ResponseEntity<>(publicationService.updatePublication(request), HttpStatus.OK);
     }

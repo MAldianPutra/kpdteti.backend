@@ -7,12 +7,18 @@ import edu.kpdteti.backend.model.request.authentication.RegisterUserRequest;
 import edu.kpdteti.backend.model.response.authentication.LoginUserResponse;
 import edu.kpdteti.backend.model.response.authentication.RegisterAdminResponse;
 import edu.kpdteti.backend.model.response.authentication.RegisterUserResponse;
+import edu.kpdteti.backend.security.JwtTokenProvider;
+import edu.kpdteti.backend.security.UserRoleProvider;
 import edu.kpdteti.backend.service.AuthenticationService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,15 +32,32 @@ import javax.validation.Valid;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(AuthenticationService authenticationService, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
         this.authenticationService = authenticationService;
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping(ApiPath.LOGIN)
     public ResponseEntity<LoginUserResponse> loginUser(@Valid @RequestBody LoginUserRequest request) {
-        return new ResponseEntity<>(authenticationService.loginUser(request), HttpStatus.OK);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUserEmail(),
+                        request.getUserPassword()
+                ));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+        UserRoleProvider userRoleProvider = tokenProvider.generateUserData(request.getUserEmail());
+        LoginUserResponse response = LoginUserResponse.builder()
+                .userId(userRoleProvider.getUserId())
+                .userName(userRoleProvider.getUserName())
+                .token(jwt)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(ApiPath.REGISTER)

@@ -1,26 +1,20 @@
 package edu.kpdteti.backend.test;
 
 import edu.kpdteti.backend.util.MLModelUtil;
-import org.dmg.pmml.FieldName;
-import org.jpmml.evaluator.*;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
 public class MLModelTest {
     public static void main(String[] args) throws JAXBException, IOException, SAXException, URISyntaxException {
+        String test = "E-commerce can be used to increase companies or sellers’ profits. For consumers, e-commerce can help them shop faster. " +
+                "The weakness of e-commerce is that there is too much product information presented in the catalog which in turn makes consumers confused. " +
+                "The solution is by providing product recommendations.";
         String text1 = "Tourism Demand Time Series Forecasting: A Systematic Literature Review, " +
                 "The tourism industry is one of the economic sectors that is overgrowing throughout the world. " +
                 "Accurate tourism demand forecasting is needed for proper strategic planning, decision making, and advanced research. " +
@@ -85,8 +79,9 @@ public class MLModelTest {
                 "while the limited scope of work becomes weakness of these models. © 2020, Springer-Verlag GmbH Germany, part of Springer Nature. Categorical clustering; Information security; Risk model; " +
                 "Text mining Ability testing; Risk analysis; Security of data; Security systems; Business aspects; Business perspective; Categorical clustering; Data measurements; Digital information; Information security threats; Sensitive informations; Subjective methods; Risk assessment";
         MLModelUtil mlModelUtil = new MLModelUtil();
-        Map<String, ?> text1PredictResult = mlModelUtil.predictText(text1);
+        Map<String, ?> testResult = mlModelUtil.predictText(test);
         long start1 = System.currentTimeMillis();
+        Map<String, ?> text1PredictResult = mlModelUtil.predictText(text1);
         System.out.println("Text 1 prediction: " + text1PredictResult);
         System.out.println("Text 1 label: " + text1PredictResult.get("Label"));
         long end1 = System.currentTimeMillis();
@@ -106,10 +101,10 @@ public class MLModelTest {
         System.out.println("Text 3 prediction: " + text5PredictResult);
         System.out.println("Text 3 label: " + text5PredictResult.get("Label"));
         long end5 = System.currentTimeMillis();
-        System.out.println("Elapsed Time in milli seconds for first text: "+ (end1-start1));
-        System.out.println("Elapsed Time in milli seconds for second text: "+ (end2-end1));
-        System.out.println("Elapsed Time in milli seconds for third text: "+ (end3-end2));
-        System.out.println("Elapsed Time in milli seconds for fourth text: "+ (end4-end3));
-        System.out.println("Elapsed Time in milli seconds for fifth text: "+ (end5-end4));
+        System.out.println("Elapsed Time in milli seconds for first text: " + (end1 - start1));
+        System.out.println("Elapsed Time in milli seconds for second text: " + (end2 - end1));
+        System.out.println("Elapsed Time in milli seconds for third text: " + (end3 - end2));
+        System.out.println("Elapsed Time in milli seconds for fourth text: " + (end4 - end3));
+        System.out.println("Elapsed Time in milli seconds for fifth text: " + (end5 - end4));
     }
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserRoleProvider {
 
     private String userId;
+    private String userName;
     private UserRoleEnum userRoleEnum;
 
 }
