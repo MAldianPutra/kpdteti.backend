@@ -27,13 +27,14 @@ public class Publication {
     public static final String CLASSIFICATION = "classification";
     public static final String AUTHOR = "author";
     public static final String TOPIC = "topic";
-    public static final String PUBLICATION_TITLE = "publicationTitle";
-    public static final String PUBLICATION_DATE = "publicationDate";
+    public static final String PUBLICATION_TITLE = "title";
+    public static final String PUBLICATION_DATE = "date";
     public static final String PUBLICATION_PUBLISHER = "publisher";
     public static final String PUBLICATION_ABSTRACT = "abstract";
     public static final String PUBLICATION_KEYWORD = "keyword";
+    public static final String PUBLICATION_LINK = "link";
     public static final String OTHER_AUTHOR = "otherAuthor";
-    public static final String PUBLICATION_PATH = "publicationPath";
+    public static final String PUBLICATION_PATH = "path";
     public static final String SAVED_BOOL = "savedBoolean";
     public static final String CREATED_AT = "createdAt";
     public static final String LAST_UPDATED = "lastUpdated";
@@ -68,6 +69,9 @@ public class Publication {
 
     @Field(value = PUBLICATION_KEYWORD)
     private String publicationKeyword;
+
+    @Field(value = PUBLICATION_LINK)
+    private String publicationLink;
 
     @Field(value = OTHER_AUTHOR)
     private List<String> otherAuthors;

@@ -22,6 +22,7 @@ public class UpdatePublicationResponse {
     private String publicationPublisher;
     private String publicationAbstract;
     private String publicationKeyword;
+    private String publicationLink;
     private String publicationPath;
     private ClassificationDto classificationDto;
     private List<String> otherAuthors;

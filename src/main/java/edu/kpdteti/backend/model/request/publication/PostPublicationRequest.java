@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.Year;
 import java.util.List;
 
 @Data
@@ -26,6 +27,7 @@ public class PostPublicationRequest {
 
     private String publicationKeyword;
     private String publicationPublisher;
+    private String publicationLink;
     private String publicationDate;
     private List<String> otherAuthors;
     private List<String> authorIds;
