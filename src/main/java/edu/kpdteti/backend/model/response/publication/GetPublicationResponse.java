@@ -23,6 +23,7 @@ public class GetPublicationResponse {
     private String publicationPublisher;
     private String publicationAbstract;
     private String publicationKeyword;
+    private String publicationLink;
     private String publicationPath;
     private Boolean isFileAvailable;
     private ClassificationDto classificationDto;

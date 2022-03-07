@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Year;
 import java.util.List;
 
 @Data
@@ -22,6 +23,7 @@ public class PostPublicationResponse {
     private String publicationPublisher;
     private String publicationAbstract;
     private String publicationKeyword;
+    private String publicationLink;
     private String publicationPath;
     private ClassificationDto classificationDto;
     private List<String> otherAuthors;
